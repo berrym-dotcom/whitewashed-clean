@@ -36,7 +36,7 @@ export default function Home() {
           backgroundImage: "url('/eugenics.jpg')",
           backgroundSize: 'cover',
           backgroundPosition: 'center',
-          filter: 'contrast(1.4) brightness(0.45) blur(3px)',
+          filter: 'contrast(1.3) brightness(0.6) blur(2px)',
           transform: 'scale(1.05)',
         }}
       />
@@ -47,7 +47,7 @@ export default function Home() {
           position: 'absolute',
           inset: 0,
           background:
-            'radial-gradient(circle at center, rgba(0,0,0,0.75), rgba(0,0,0,0.98))',
+            'radial-gradient(circle at center, rgba(0,0,0,0.6), rgba(0,0,0,0.92))',
         }}
       />
 
@@ -76,15 +76,15 @@ export default function Home() {
           WHITEWASHED
         </h1>
 
-        <p style={{ marginBottom: 20, opacity: 0.85 }}>
+        <p style={{ marginBottom: 20, opacity: 0.9 }}>
           She said she was poisoned.
         </p>
 
-        <p style={{ marginBottom: 20, opacity: 0.65 }}>
+        <p style={{ marginBottom: 20, opacity: 0.7 }}>
           They said she was mistaken.
         </p>
 
-        <p style={{ marginBottom: 40, opacity: 0.5 }}>
+        <p style={{ marginBottom: 40, opacity: 0.55 }}>
           The record was changed.
         </p>
 
