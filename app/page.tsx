@@ -98,6 +98,39 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ================= SCENE 6 ================= */}
+      <section style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#040404', padding: '80px 20px' }}>
+        <div style={{ maxWidth: '700px', textAlign: 'center' }}>
+          <p style={{ fontSize: '18px', opacity: 0.6, marginBottom: '30px' }}>
+            This was not a random moment.
+          </p>
+
+          <p style={{ fontSize: '20px', lineHeight: 1.6, marginBottom: '30px' }}>
+            At the turn of the century, a new belief was taking hold.
+          </p>
+
+          <p style={{ fontSize: '20px', lineHeight: 1.6, marginBottom: '30px' }}>
+            That society could be improved—engineered—through control.
+          </p>
+
+          <p style={{ fontSize: '20px', lineHeight: 1.6, marginBottom: '50px' }}>
+            That weakness, defect, and disorder could be identified and removed.
+          </p>
+
+          <p style={{ fontSize: '22px', letterSpacing: '2px', opacity: 0.8 }}>
+            EUGENICS
+          </p>
+
+          <p style={{ marginTop: '40px', fontSize: '18px', opacity: 0.5 }}>
+            The idea was not fringe.
+          </p>
+
+          <p style={{ fontSize: '18px', opacity: 0.5 }}>
+            It was institutional.
+          </p>
+        </div>
+      </section>
+
     </main>
   );
 }
