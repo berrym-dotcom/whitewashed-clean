@@ -3,42 +3,13 @@ export default function Home() {
     <main
       style={{
         fontFamily: 'Georgia, serif',
-        backgroundColor: '#000',
-        backgroundImage: "url('/eugenics.jpg')",
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
-        minHeight: '100vh',
+        background: '#000',
         color: '#efe7d6',
+        minHeight: '100vh',
         position: 'relative',
         overflow: 'hidden',
-        filter: 'contrast(1.2) brightness(0.75)',
       }}
     >
-      {/* DARK OVERLAY */}
-      <div
-        style={{
-          position: 'absolute',
-          inset: 0,
-          background:
-            'linear-gradient(to bottom, rgba(0,0,0,0.92), rgba(0,0,0,0.98))',
-          backdropFilter: 'blur(2px)',
-          zIndex: 1,
-        }}
-      />
-
-      {/* FILM GRAIN */}
-      <div
-        style={{
-          position: 'absolute',
-          inset: 0,
-          opacity: 0.08,
-          backgroundImage:
-            'url("https://grainy-gradients.vercel.app/noise.svg")',
-          zIndex: 2,
-        }}
-      />
-
       {/* NAV */}
       <nav
         style={{
@@ -47,96 +18,89 @@ export default function Home() {
           right: 40,
           zIndex: 10,
           fontSize: '12px',
-          letterSpacing: '3px',
-          opacity: 0.7,
+          letterSpacing: '2px',
         }}
       >
-        <a href="/" style={{ marginRight: 20, color: '#efe7d6' }}>HOME</a>
-        <a href="/about" style={{ marginRight: 20, color: '#efe7d6' }}>ABOUT</a>
-        <a href="/film" style={{ marginRight: 20, color: '#efe7d6' }}>FILM</a>
-        <a href="/epk" style={{ marginRight: 20, color: '#efe7d6' }}>EPK</a>
-        <a href="/contact" style={{ color: '#efe7d6' }}>CONTACT</a>
+        <a href="/" style={{ marginRight: 20, color: '#efe7d6', textDecoration: 'none' }}>HOME</a>
+        <a href="/about" style={{ marginRight: 20, color: '#efe7d6', textDecoration: 'none' }}>ABOUT</a>
+        <a href="/film" style={{ marginRight: 20, color: '#efe7d6', textDecoration: 'none' }}>FILM</a>
+        <a href="/epk" style={{ marginRight: 20, color: '#efe7d6', textDecoration: 'none' }}>EPK</a>
+        <a href="/contact" style={{ color: '#efe7d6', textDecoration: 'none' }}>CONTACT</a>
       </nav>
+
+      {/* BACKGROUND IMAGE */}
+      <div
+        style={{
+          position: 'absolute',
+          inset: 0,
+          backgroundImage: "url('/eugenics.jpg')",
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          filter: 'contrast(1.4) brightness(0.45) blur(3px)',
+          transform: 'scale(1.05)',
+        }}
+      />
+
+      {/* DARK OVERLAY */}
+      <div
+        style={{
+          position: 'absolute',
+          inset: 0,
+          background:
+            'radial-gradient(circle at center, rgba(0,0,0,0.75), rgba(0,0,0,0.98))',
+        }}
+      />
 
       {/* CONTENT */}
       <div
         style={{
           position: 'relative',
-          zIndex: 5,
+          zIndex: 2,
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-          minHeight: '100vh',
+          height: '100vh',
           textAlign: 'center',
+          padding: '20px',
         }}
       >
-        {/* TITLE */}
         <h1
           style={{
-            fontSize: '72px',
-            letterSpacing: '8px',
-            marginBottom: '60px',
-            animation: 'fadeIn 2s ease forwards',
+            fontSize: '84px',
+            letterSpacing: '6px',
+            marginBottom: '40px',
+            fontWeight: 500,
           }}
         >
           WHITEWASHED
         </h1>
 
-        {/* TEXT */}
-        <p style={{ opacity: 0, animation: 'fadeIn 2s ease forwards 1s', marginBottom: '28px', letterSpacing: '1px' }}>
+        <p style={{ marginBottom: 20, opacity: 0.85 }}>
           She said she was poisoned.
         </p>
 
-        <p style={{ opacity: 0, animation: 'fadeIn 2s ease forwards 2.5s', marginBottom: '28px', letterSpacing: '1px' }}>
+        <p style={{ marginBottom: 20, opacity: 0.65 }}>
           They said she was mistaken.
         </p>
 
-        <p style={{ opacity: 0, animation: 'fadeIn 2s ease forwards 4s', marginBottom: '50px', letterSpacing: '1px' }}>
+        <p style={{ marginBottom: 40, opacity: 0.5 }}>
           The record was changed.
         </p>
 
-        {/* BUTTON */}
         <button
           style={{
-            opacity: 0,
-            animation: 'fadeIn 2s ease forwards 5.5s',
+            padding: '12px 28px',
             border: '1px solid #efe7d6',
-            padding: '14px 34px',
             background: 'transparent',
             color: '#efe7d6',
-            letterSpacing: '3px',
+            letterSpacing: '2px',
             cursor: 'pointer',
-            transition: 'all 0.3s ease',
-          }}
-          onMouseOver={(e) => {
-            e.currentTarget.style.background = '#efe7d6';
-            e.currentTarget.style.color = '#000';
-          }}
-          onMouseOut={(e) => {
-            e.currentTarget.style.background = 'transparent';
-            e.currentTarget.style.color = '#efe7d6';
           }}
         >
           WATCH FILM
         </button>
       </div>
-
-      {/* ANIMATION */}
-      <style>
-        {`
-          @keyframes fadeIn {
-            from {
-              opacity: 0;
-              transform: translateY(10px);
-            }
-            to {
-              opacity: 1;
-              transform: translateY(0);
-            }
-          }
-        `}
-      </style>
     </main>
   );
 }
