@@ -9,7 +9,7 @@ export default function Home() {
       overflow: 'hidden'
     }}>
 
-      {/* BASE IMAGE (Stanford) */}
+      {/* BACKGROUND: STANFORD */}
       <div style={{
         position: 'absolute',
         inset: 0,
@@ -21,7 +21,7 @@ export default function Home() {
         zIndex: 0
       }} />
 
-      {/* OVERLAY IMAGE (Eugenics) */}
+      {/* BACKGROUND: EUGENICS OVERLAY */}
       <div style={{
         position: 'absolute',
         inset: 0,
@@ -34,7 +34,7 @@ export default function Home() {
         zIndex: 1
       }} />
 
-      {/* DARK VEIL */}
+      {/* DARK OVERLAY */}
       <div style={{
         position: 'absolute',
         inset: 0,
@@ -64,13 +64,12 @@ export default function Home() {
           <h1 style={{
             fontSize: '72px',
             letterSpacing: '6px',
-            fontWeight: 500,
-            marginBottom: '20px'
+            fontWeight: 500
           }}>
             WHITEWASHED
           </h1>
 
-          <p style={{ opacity: 0.8 }}>
+          <p style={{ marginTop: '20px', opacity: 0.8 }}>
             She said she was poisoned.
           </p>
 
@@ -105,31 +104,31 @@ export default function Home() {
           padding: '80px 20px',
           borderTop: '1px solid rgba(255,255,255,0.1)'
         }}>
-          <p style={{ fontSize: '20px', lineHeight: '1.9' }}>
-            In 1905, Jane Stanford died under suspicious circumstances.
-          </p>
+          <p>1905.</p>
 
-          <p style={{ marginTop: '20px', opacity: 0.85 }}>
-            The first diagnosis confirmed poisoning.
-          </p>
+          <p>Jane Stanford is dying.</p>
 
-          <p style={{ marginTop: '20px', opacity: 0.85 }}>
-            The second erased it.
-          </p>
+          <p>The first diagnosis is clear: poison.</p>
 
-          <p style={{ marginTop: '40px', opacity: 0.6 }}>
-            What happened in between is the story.
+          <p>The second rewrites it.</p>
+
+          <p>Nothing about the body changed.</p>
+
+          <p>Only the conclusion.</p>
+
+          <p style={{ marginTop: '40px', opacity: 0.5 }}>
+            OFFICIAL RECORD: NATURAL CAUSES
           </p>
         </section>
 
-        {/* FINAL LINE */}
+        {/* FOOTER */}
         <section style={{
           padding: '80px 20px',
           fontSize: '12px',
           letterSpacing: '2px',
           opacity: 0.35
         }}>
-          OFFICIAL RECORD: NATURAL CAUSES
+          A FILM BY BERRY MINOTT
         </section>
 
       </div>
