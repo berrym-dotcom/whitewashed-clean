@@ -47,107 +47,30 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ================= SCENE 3 ================= */}
-      <section style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#000', padding: '80px 20px' }}>
-        <div style={{ maxWidth: '900px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '40px' }}>
-          <div>
-            <p style={{ fontSize: '18px', lineHeight: 1.6, opacity: 0.85, marginBottom: '20px' }}>She reported a bitter taste.</p>
-            <p style={{ fontSize: '18px', lineHeight: 1.6, opacity: 0.85 }}>Her symptoms were consistent with poisoning.</p>
-          </div>
-
-          <div>
-            <p style={{ fontSize: '18px', lineHeight: 1.6, opacity: 0.5, marginBottom: '20px' }}>The attending physician revised his conclusion.</p>
-            <p style={{ fontSize: '18px', lineHeight: 1.6, opacity: 0.5 }}>The cause of death was declared natural.</p>
-          </div>
-        </div>
-      </section>
-
-      {/* ================= SCENE 4 ================= */}
+      {/* ================= SCENE 8 ================= */}
       <section style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#050505', padding: '80px 20px' }}>
-        <div style={{ maxWidth: '700px', textAlign: 'center' }}>
-          <p style={{ fontSize: '18px', opacity: 0.6, marginBottom: '30px' }}>At the center of the university stood a man.</p>
-          <p style={{ fontSize: '32px', letterSpacing: '2px', marginBottom: '30px' }}>DAVID STARR JORDAN</p>
-          <p style={{ fontSize: '18px', opacity: 0.7 }}>President of Stanford University.</p>
-          <p style={{ marginTop: '40px', fontSize: '18px', opacity: 0.5 }}>He helped shape what would be remembered.</p>
-        </div>
-      </section>
-
-      {/* ================= SCENE 5 ================= */}
-      <section style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#000', padding: '80px 20px' }}>
         <div style={{ maxWidth: '700px', textAlign: 'left' }}>
-          <p style={{ marginBottom: '30px', fontSize: '20px', lineHeight: 1.6 }}>
-            Those closest to Jane Stanford began to change their accounts.
-          </p>
 
           <p style={{ marginBottom: '30px', fontSize: '20px', lineHeight: 1.6 }}>
-            Statements softened. Details disappeared.
+            Not all accounts matched.
           </p>
 
           <p style={{ marginBottom: '30px', fontSize: '20px', lineHeight: 1.6 }}>
-            What had been certain became unclear.
+            Some descriptions of her symptoms were omitted.
           </p>
 
-          <p style={{ marginTop: '50px', fontSize: '20px', lineHeight: 1.6, opacity: 0.7 }}>
-            Over time, even memory adjusted.
+          <p style={{ marginBottom: '30px', fontSize: '20px', lineHeight: 1.6 }}>
+            Early conclusions were no longer referenced.
           </p>
 
-          <p style={{ marginTop: '40px', fontSize: '16px', letterSpacing: '2px', opacity: 0.5 }}>
-            BERTHA BERNER WOULD LATER DENY POISONING ALTOGETHER
-          </p>
-        </div>
-      </section>
-
-      {/* ================= SCENE 6 ================= */}
-      <section style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#040404', padding: '80px 20px' }}>
-        <div style={{ maxWidth: '700px', textAlign: 'center' }}>
-          <p style={{ fontSize: '18px', opacity: 0.6, marginBottom: '30px' }}>
-            This was not a random moment.
+          <p style={{ marginBottom: '30px', fontSize: '20px', lineHeight: 1.6 }}>
+            Certain details appeared only once—then disappeared.
           </p>
 
-          <p style={{ fontSize: '20px', lineHeight: 1.6, marginBottom: '30px' }}>
-            At the turn of the century, a new belief was taking hold.
+          <p style={{ marginTop: '60px', fontSize: '22px', letterSpacing: '2px', opacity: 0.8 }}>
+            THE RECORD WAS NOT CONSISTENT
           </p>
 
-          <p style={{ fontSize: '20px', lineHeight: 1.6, marginBottom: '30px' }}>
-            That society could be improved—engineered—through control.
-          </p>
-
-          <p style={{ fontSize: '20px', lineHeight: 1.6, marginBottom: '50px' }}>
-            That weakness, defect, and disorder could be identified and removed.
-          </p>
-
-          <p style={{ fontSize: '22px', letterSpacing: '2px', opacity: 0.8 }}>
-            EUGENICS
-          </p>
-
-          <p style={{ marginTop: '40px', fontSize: '18px', opacity: 0.5 }}>
-            The idea was not fringe.
-          </p>
-
-          <p style={{ fontSize: '18px', opacity: 0.5 }}>
-            It was institutional.
-          </p>
-        </div>
-      </section>
-
-      {/* ================= SCENE 7 ================= */}
-      <section style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#000', padding: '80px 20px' }}>
-        <div style={{ maxWidth: '700px', textAlign: 'center' }}>
-          <p style={{ fontSize: '20px', marginBottom: '30px' }}>
-            The diagnosis was changed.
-          </p>
-
-          <p style={{ fontSize: '20px', marginBottom: '30px' }}>
-            The evidence was reframed.
-          </p>
-
-          <p style={{ fontSize: '20px', marginBottom: '30px' }}>
-            The case was closed.
-          </p>
-
-          <p style={{ marginTop: '60px', fontSize: '24px', letterSpacing: '2px', opacity: 0.8 }}>
-            HISTORY ACCEPTED THE REVISION
-          </p>
         </div>
       </section>
 
