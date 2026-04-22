@@ -14,7 +14,6 @@ export default function Home() {
 
       {/* ================= HERO ================= */}
       <section style={{ height: '100vh', position: 'relative', overflow: 'hidden' }}>
-
         <nav style={{ position: 'fixed', top: 20, right: 40, zIndex: 10, fontSize: '12px', letterSpacing: '2px', opacity: visible ? 1 : 0, transition: 'opacity 1.5s ease' }}>
           <a href="/" style={{ marginRight: 20, color: '#efe7d6', textDecoration: 'none' }}>HOME</a>
           <a href="/about" style={{ marginRight: 20, color: '#efe7d6', textDecoration: 'none' }}>ABOUT</a>
@@ -127,6 +126,27 @@ export default function Home() {
 
           <p style={{ fontSize: '18px', opacity: 0.5 }}>
             It was institutional.
+          </p>
+        </div>
+      </section>
+
+      {/* ================= SCENE 7 ================= */}
+      <section style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#000', padding: '80px 20px' }}>
+        <div style={{ maxWidth: '700px', textAlign: 'center' }}>
+          <p style={{ fontSize: '20px', marginBottom: '30px' }}>
+            The diagnosis was changed.
+          </p>
+
+          <p style={{ fontSize: '20px', marginBottom: '30px' }}>
+            The evidence was reframed.
+          </p>
+
+          <p style={{ fontSize: '20px', marginBottom: '30px' }}>
+            The case was closed.
+          </p>
+
+          <p style={{ marginTop: '60px', fontSize: '24px', letterSpacing: '2px', opacity: 0.8 }}>
+            HISTORY ACCEPTED THE REVISION
           </p>
         </div>
       </section>
