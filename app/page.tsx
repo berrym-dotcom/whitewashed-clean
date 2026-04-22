@@ -9,7 +9,23 @@ export default function Home() {
       overflow: 'hidden'
     }}>
 
-      {/* BACKGROUND: STANFORD */}
+      {/* NAV */}
+      <nav style={{
+        position: 'fixed',
+        top: 20,
+        right: 40,
+        zIndex: 10,
+        fontSize: '12px',
+        letterSpacing: '2px'
+      }}>
+        <a href="/" style={{ marginRight: 20, color: '#efe7d6', textDecoration: 'none' }}>HOME</a>
+        <a href="/about" style={{ marginRight: 20, color: '#efe7d6', textDecoration: 'none' }}>ABOUT</a>
+        <a href="/film" style={{ marginRight: 20, color: '#efe7d6', textDecoration: 'none' }}>FILM</a>
+        <a href="/epk" style={{ marginRight: 20, color: '#efe7d6', textDecoration: 'none' }}>EPK</a>
+        <a href="/contact" style={{ color: '#efe7d6', textDecoration: 'none' }}>CONTACT</a>
+      </nav>
+
+      {/* BACKGROUND IMAGE */}
       <div style={{
         position: 'absolute',
         inset: 0,
@@ -21,7 +37,7 @@ export default function Home() {
         zIndex: 0
       }} />
 
-      {/* BACKGROUND: EUGENICS OVERLAY */}
+      {/* EUGENICS OVERLAY */}
       <div style={{
         position: 'absolute',
         inset: 0,
@@ -64,12 +80,13 @@ export default function Home() {
           <h1 style={{
             fontSize: '72px',
             letterSpacing: '6px',
-            fontWeight: 500
+            fontWeight: 500,
+            marginBottom: '20px'
           }}>
             WHITEWASHED
           </h1>
 
-          <p style={{ marginTop: '20px', opacity: 0.8 }}>
+          <p style={{ opacity: 0.8 }}>
             She said she was poisoned.
           </p>
 
@@ -105,15 +122,10 @@ export default function Home() {
           borderTop: '1px solid rgba(255,255,255,0.1)'
         }}>
           <p>1905.</p>
-
           <p>Jane Stanford is dying.</p>
-
           <p>The first diagnosis is clear: poison.</p>
-
           <p>The second rewrites it.</p>
-
           <p>Nothing about the body changed.</p>
-
           <p>Only the conclusion.</p>
 
           <p style={{ marginTop: '40px', opacity: 0.5 }}>
