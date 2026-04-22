@@ -1,4 +1,14 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+
 export default function Home() {
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    setTimeout(() => setVisible(true), 300);
+  }, []);
+
   return (
     <main
       style={{
@@ -19,6 +29,8 @@ export default function Home() {
           zIndex: 10,
           fontSize: '12px',
           letterSpacing: '2px',
+          opacity: visible ? 1 : 0,
+          transition: 'opacity 1.5s ease',
         }}
       >
         <a href="/" style={{ marginRight: 20, color: '#efe7d6', textDecoration: 'none' }}>HOME</a>
@@ -28,7 +40,7 @@ export default function Home() {
         <a href="/contact" style={{ color: '#efe7d6', textDecoration: 'none' }}>CONTACT</a>
       </nav>
 
-      {/* BACKGROUND IMAGE */}
+      {/* BACKGROUND IMAGE (ZOOM ANIMATION) */}
       <div
         style={{
           position: 'absolute',
@@ -37,7 +49,8 @@ export default function Home() {
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           filter: 'contrast(1.3) brightness(0.6) blur(2px)',
-          transform: 'scale(1.05)',
+          transform: visible ? 'scale(1.08)' : 'scale(1.02)',
+          transition: 'transform 8s ease-out',
         }}
       />
 
@@ -71,20 +84,41 @@ export default function Home() {
             letterSpacing: '6px',
             marginBottom: '40px',
             fontWeight: 500,
+            opacity: visible ? 1 : 0,
+            transform: visible ? 'translateY(0px)' : 'translateY(20px)',
+            transition: 'all 1.5s ease',
           }}
         >
           WHITEWASHED
         </h1>
 
-        <p style={{ marginBottom: 20, opacity: 0.9 }}>
+        <p
+          style={{
+            marginBottom: 20,
+            opacity: visible ? 0.9 : 0,
+            transition: 'opacity 2s ease 0.5s',
+          }}
+        >
           She said she was poisoned.
         </p>
 
-        <p style={{ marginBottom: 20, opacity: 0.7 }}>
+        <p
+          style={{
+            marginBottom: 20,
+            opacity: visible ? 0.7 : 0,
+            transition: 'opacity 2s ease 1s',
+          }}
+        >
           They said she was mistaken.
         </p>
 
-        <p style={{ marginBottom: 40, opacity: 0.55 }}>
+        <p
+          style={{
+            marginBottom: 40,
+            opacity: visible ? 0.55 : 0,
+            transition: 'opacity 2s ease 1.5s',
+          }}
+        >
           The record was changed.
         </p>
 
@@ -96,6 +130,8 @@ export default function Home() {
             color: '#efe7d6',
             letterSpacing: '2px',
             cursor: 'pointer',
+            opacity: visible ? 1 : 0,
+            transition: 'opacity 2s ease 2s',
           }}
         >
           WATCH FILM
