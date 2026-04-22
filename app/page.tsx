@@ -10,21 +10,11 @@ export default function Home() {
   }, []);
 
   return (
-    <main
-      style={{
-        fontFamily: 'Georgia, serif',
-        background: '#000',
-        color: '#efe7d6',
-      }}
-    >
+    <main style={{ fontFamily: 'Georgia, serif', background: '#000', color: '#efe7d6' }}>
+
       {/* ================= HERO ================= */}
-      <section
-        style={{
-          height: '100vh',
-          position: 'relative',
-          overflow: 'hidden',
-        }}
-      >
+      <section style={{ height: '100vh', position: 'relative', overflow: 'hidden' }}>
+
         {/* NAV */}
         <nav
           style={{
@@ -146,6 +136,50 @@ export default function Home() {
           </p>
         </div>
       </section>
+
+      {/* ================= SCENE 3 ================= */}
+      <section
+        style={{
+          minHeight: '100vh',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          background: '#000',
+          padding: '80px 20px',
+        }}
+      >
+        <div
+          style={{
+            maxWidth: '900px',
+            display: 'grid',
+            gridTemplateColumns: '1fr 1fr',
+            gap: '40px',
+          }}
+        >
+          {/* LEFT */}
+          <div>
+            <p style={{ fontSize: '18px', lineHeight: 1.6, opacity: 0.85, marginBottom: '20px' }}>
+              She reported a bitter taste.
+            </p>
+
+            <p style={{ fontSize: '18px', lineHeight: 1.6, opacity: 0.85 }}>
+              Her symptoms were consistent with poisoning.
+            </p>
+          </div>
+
+          {/* RIGHT */}
+          <div>
+            <p style={{ fontSize: '18px', lineHeight: 1.6, opacity: 0.5, marginBottom: '20px' }}>
+              The attending physician revised his conclusion.
+            </p>
+
+            <p style={{ fontSize: '18px', lineHeight: 1.6, opacity: 0.5 }}>
+              The cause of death was declared natural.
+            </p>
+          </div>
+        </div>
+      </section>
+
     </main>
   );
 }
