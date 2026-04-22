@@ -12,15 +12,17 @@ export default function Home() {
         color: '#efe7d6',
         position: 'relative',
         overflow: 'hidden',
+        filter: 'contrast(1.2) brightness(0.75)',
       }}
     >
-      {/* DARK FILM OVERLAY */}
+      {/* DARK OVERLAY */}
       <div
         style={{
           position: 'absolute',
           inset: 0,
           background:
-            'linear-gradient(to bottom, rgba(0,0,0,0.9), rgba(0,0,0,0.95))',
+            'linear-gradient(to bottom, rgba(0,0,0,0.92), rgba(0,0,0,0.98))',
+          backdropFilter: 'blur(2px)',
           zIndex: 1,
         }}
       />
@@ -74,23 +76,23 @@ export default function Home() {
           style={{
             fontSize: '72px',
             letterSpacing: '8px',
-            marginBottom: '50px',
+            marginBottom: '60px',
             animation: 'fadeIn 2s ease forwards',
           }}
         >
           WHITEWASHED
         </h1>
 
-        {/* TEXT SEQUENCE */}
-        <p style={{ opacity: 0, animation: 'fadeIn 2s ease forwards 1s', marginBottom: '20px' }}>
+        {/* TEXT */}
+        <p style={{ opacity: 0, animation: 'fadeIn 2s ease forwards 1s', marginBottom: '28px', letterSpacing: '1px' }}>
           She said she was poisoned.
         </p>
 
-        <p style={{ opacity: 0, animation: 'fadeIn 2s ease forwards 2.5s', marginBottom: '20px' }}>
+        <p style={{ opacity: 0, animation: 'fadeIn 2s ease forwards 2.5s', marginBottom: '28px', letterSpacing: '1px' }}>
           They said she was mistaken.
         </p>
 
-        <p style={{ opacity: 0, animation: 'fadeIn 2s ease forwards 4s', marginBottom: '50px' }}>
+        <p style={{ opacity: 0, animation: 'fadeIn 2s ease forwards 4s', marginBottom: '50px', letterSpacing: '1px' }}>
           The record was changed.
         </p>
 
@@ -120,7 +122,7 @@ export default function Home() {
         </button>
       </div>
 
-      {/* ANIMATIONS */}
+      {/* ANIMATION */}
       <style>
         {`
           @keyframes fadeIn {
