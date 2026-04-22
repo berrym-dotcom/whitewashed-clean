@@ -11,14 +11,29 @@ export default function Home() {
         minHeight: '100vh',
         color: '#efe7d6',
         position: 'relative',
+        overflow: 'hidden',
       }}
     >
-      {/* DARK OVERLAY (this makes it cinematic) */}
+      {/* DARK FILM OVERLAY */}
       <div
         style={{
           position: 'absolute',
           inset: 0,
-          background: 'rgba(0,0,0,0.75)',
+          background:
+            'linear-gradient(to bottom, rgba(0,0,0,0.9), rgba(0,0,0,0.95))',
+          zIndex: 1,
+        }}
+      />
+
+      {/* FILM GRAIN */}
+      <div
+        style={{
+          position: 'absolute',
+          inset: 0,
+          opacity: 0.08,
+          backgroundImage:
+            'url("https://grainy-gradients.vercel.app/noise.svg")',
+          zIndex: 2,
         }}
       />
 
@@ -30,7 +45,8 @@ export default function Home() {
           right: 40,
           zIndex: 10,
           fontSize: '12px',
-          letterSpacing: '2px',
+          letterSpacing: '3px',
+          opacity: 0.7,
         }}
       >
         <a href="/" style={{ marginRight: 20, color: '#efe7d6' }}>HOME</a>
@@ -44,7 +60,7 @@ export default function Home() {
       <div
         style={{
           position: 'relative',
-          zIndex: 2,
+          zIndex: 5,
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
@@ -53,41 +69,72 @@ export default function Home() {
           textAlign: 'center',
         }}
       >
+        {/* TITLE */}
         <h1
           style={{
-            fontSize: '64px',
-            letterSpacing: '6px',
-            marginBottom: '40px',
+            fontSize: '72px',
+            letterSpacing: '8px',
+            marginBottom: '50px',
+            animation: 'fadeIn 2s ease forwards',
           }}
         >
           WHITEWASHED
         </h1>
 
-        <p style={{ opacity: 0.8, marginBottom: '20px' }}>
+        {/* TEXT SEQUENCE */}
+        <p style={{ opacity: 0, animation: 'fadeIn 2s ease forwards 1s', marginBottom: '20px' }}>
           She said she was poisoned.
         </p>
 
-        <p style={{ opacity: 0.6, marginBottom: '20px' }}>
+        <p style={{ opacity: 0, animation: 'fadeIn 2s ease forwards 2.5s', marginBottom: '20px' }}>
           They said she was mistaken.
         </p>
 
-        <p style={{ opacity: 0.4, marginBottom: '40px' }}>
+        <p style={{ opacity: 0, animation: 'fadeIn 2s ease forwards 4s', marginBottom: '50px' }}>
           The record was changed.
         </p>
 
+        {/* BUTTON */}
         <button
           style={{
+            opacity: 0,
+            animation: 'fadeIn 2s ease forwards 5.5s',
             border: '1px solid #efe7d6',
-            padding: '12px 28px',
+            padding: '14px 34px',
             background: 'transparent',
             color: '#efe7d6',
-            letterSpacing: '2px',
+            letterSpacing: '3px',
             cursor: 'pointer',
+            transition: 'all 0.3s ease',
+          }}
+          onMouseOver={(e) => {
+            e.currentTarget.style.background = '#efe7d6';
+            e.currentTarget.style.color = '#000';
+          }}
+          onMouseOut={(e) => {
+            e.currentTarget.style.background = 'transparent';
+            e.currentTarget.style.color = '#efe7d6';
           }}
         >
           WATCH FILM
         </button>
       </div>
+
+      {/* ANIMATIONS */}
+      <style>
+        {`
+          @keyframes fadeIn {
+            from {
+              opacity: 0;
+              transform: translateY(10px);
+            }
+            to {
+              opacity: 1;
+              transform: translateY(0);
+            }
+          }
+        `}
+      </style>
     </main>
   );
 }
