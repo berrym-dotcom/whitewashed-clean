@@ -15,7 +15,6 @@ export default function Home() {
       {/* ================= HERO ================= */}
       <section style={{ height: '100vh', position: 'relative', overflow: 'hidden' }}>
 
-        {/* NAV */}
         <nav
           style={{
             position: 'fixed',
@@ -35,7 +34,6 @@ export default function Home() {
           <a href="/contact" style={{ color: '#efe7d6', textDecoration: 'none' }}>CONTACT</a>
         </nav>
 
-        {/* BACKGROUND */}
         <div
           style={{
             position: 'absolute',
@@ -49,7 +47,6 @@ export default function Home() {
           }}
         />
 
-        {/* OVERLAY */}
         <div
           style={{
             position: 'absolute',
@@ -59,7 +56,6 @@ export default function Home() {
           }}
         />
 
-        {/* HERO CONTENT */}
         <div
           style={{
             position: 'relative',
@@ -101,16 +97,7 @@ export default function Home() {
       </section>
 
       {/* ================= SCENE 2 ================= */}
-      <section
-        style={{
-          minHeight: '100vh',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          padding: '80px 20px',
-          background: '#0a0a0a',
-        }}
-      >
+      <section style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '80px 20px', background: '#0a0a0a' }}>
         <div style={{ maxWidth: '700px', textAlign: 'left' }}>
           <p style={{ marginBottom: '30px', fontSize: '20px', lineHeight: 1.6 }}>
             In 1905, Jane Stanford died under suspicious circumstances.
@@ -124,39 +111,15 @@ export default function Home() {
             The second erased it.
           </p>
 
-          <p
-            style={{
-              marginTop: '50px',
-              fontSize: '24px',
-              letterSpacing: '2px',
-              opacity: 0.8,
-            }}
-          >
+          <p style={{ marginTop: '50px', fontSize: '24px', letterSpacing: '2px', opacity: 0.8 }}>
             OFFICIAL RECORD: NATURAL CAUSES
           </p>
         </div>
       </section>
 
       {/* ================= SCENE 3 ================= */}
-      <section
-        style={{
-          minHeight: '100vh',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          background: '#000',
-          padding: '80px 20px',
-        }}
-      >
-        <div
-          style={{
-            maxWidth: '900px',
-            display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
-            gap: '40px',
-          }}
-        >
-          {/* LEFT */}
+      <section style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#000', padding: '80px 20px' }}>
+        <div style={{ maxWidth: '900px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '40px' }}>
           <div>
             <p style={{ fontSize: '18px', lineHeight: 1.6, opacity: 0.85, marginBottom: '20px' }}>
               She reported a bitter taste.
@@ -167,7 +130,6 @@ export default function Home() {
             </p>
           </div>
 
-          {/* RIGHT */}
           <div>
             <p style={{ fontSize: '18px', lineHeight: 1.6, opacity: 0.5, marginBottom: '20px' }}>
               The attending physician revised his conclusion.
@@ -177,6 +139,27 @@ export default function Home() {
               The cause of death was declared natural.
             </p>
           </div>
+        </div>
+      </section>
+
+      {/* ================= SCENE 4 ================= */}
+      <section style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#050505', padding: '80px 20px' }}>
+        <div style={{ maxWidth: '700px', textAlign: 'center' }}>
+          <p style={{ fontSize: '18px', opacity: 0.6, marginBottom: '30px' }}>
+            At the center of the university stood a man.
+          </p>
+
+          <p style={{ fontSize: '32px', letterSpacing: '2px', marginBottom: '30px' }}>
+            DAVID STARR JORDAN
+          </p>
+
+          <p style={{ fontSize: '18px', opacity: 0.7 }}>
+            President of Stanford University.
+          </p>
+
+          <p style={{ marginTop: '40px', fontSize: '18px', opacity: 0.5 }}>
+            He helped shape what would be remembered.
+          </p>
         </div>
       </section>
 
