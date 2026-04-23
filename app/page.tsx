@@ -1,9 +1,8 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function Home() {
-  const audioRef = useRef<HTMLAudioElement>(null);
   const [started, setStarted] = useState(false);
 
   // SIMPLE AUTO SCROLL
@@ -22,16 +21,8 @@ export default function Home() {
     scroll();
   }, [started]);
 
-  const startExperience = () => {
-    setStarted(true);
-    audioRef.current?.play();
-  };
-
   return (
     <main style={{ fontFamily: 'Georgia, serif', background: '#000', color: '#efe7d6' }}>
-
-      {/* AUDIO */}
-      <audio ref={audioRef} src="/ambient.mp3" loop />
 
       {/* START SCREEN */}
       {!started && (
@@ -45,7 +36,7 @@ export default function Home() {
           zIndex: 100
         }}>
           <button
-            onClick={startExperience}
+            onClick={() => setStarted(true)}
             style={{
               border: '1px solid #efe7d6',
               background: 'transparent',
@@ -61,58 +52,43 @@ export default function Home() {
       )}
 
       {/* SCENE 1 */}
-      <section style={scene}>
-        <Background img="/eugenics.jpg" />
-        <Content>
-          <h1 style={title}>WHITEWASHED</h1>
-          <p>She said she was poisoned.</p>
-          <p style={dim}>They said she was mistaken.</p>
-          <p style={fade}>The record was changed.</p>
-        </Content>
-      </section>
+      <Scene img="/eugenics.jpg">
+        <h1 style={title}>WHITEWASHED</h1>
+        <p>She said she was poisoned.</p>
+        <p style={dim}>They said she was mistaken.</p>
+        <p style={fade}>The record was changed.</p>
+      </Scene>
 
       {/* SCENE 2 */}
-      <section style={scene}>
-        <Background img="/newspaper.jpg" />
-        <Content>
-          <h2>1905</h2>
-          <p>The first report confirmed poisoning.</p>
-          <p style={dim}>The second erased it.</p>
-          <p style={fade}>What happened in between is the story.</p>
-        </Content>
-      </section>
+      <Scene img="/newspaper.jpg">
+        <h2>1905</h2>
+        <p>The first report confirmed poisoning.</p>
+        <p style={dim}>The second erased it.</p>
+        <p style={fade}>What happened in between is the story.</p>
+      </Scene>
 
       {/* SCENE 3 */}
-      <section style={scene}>
-        <Background img="/bertha.jpg" />
-        <Content>
-          <p style={dim}>She was there.</p>
-          <h2>BERTHA BERNER</h2>
-          <p>Secretary. Witness. Keeper of the story.</p>
-        </Content>
-      </section>
+      <Scene img="/bertha.jpg">
+        <p style={dim}>She was there.</p>
+        <h2>BERTHA BERNER</h2>
+        <p>Secretary. Witness. Keeper of the story.</p>
+      </Scene>
 
       {/* SCENE 4 */}
-      <section style={scene}>
-        <Background img="/jordan.jpg" dark />
-        <Content>
-          <p style={dim}>At the center of the institution:</p>
-          <h2>DAVID STARR JORDAN</h2>
-          <p>President of Stanford University.</p>
-        </Content>
-      </section>
+      <Scene img="/jordan.jpg" dark>
+        <p style={dim}>At the center of the institution:</p>
+        <h2>DAVID STARR JORDAN</h2>
+        <p>President of Stanford University.</p>
+      </Scene>
 
       {/* SCENE 5 */}
-      <section style={scene}>
-        <Background img="/stanford.jpg" />
-        <Content>
-          <p>
-            The institution endured.<br />
-            The narrative stabilized.<br />
-            The record remained.
-          </p>
-        </Content>
-      </section>
+      <Scene img="/stanford.jpg">
+        <p>
+          The institution endured.<br />
+          The narrative stabilized.<br />
+          The record remained.
+        </p>
+      </Scene>
 
       {/* FINAL */}
       <section style={{ padding: '120px 20px', textAlign: 'center' }}>
@@ -120,7 +96,7 @@ export default function Home() {
         <p>The evidence shifted.</p>
         <p>The story remained.</p>
 
-        <h2 style={{ marginTop: 40, letterSpacing: 2 }}>
+        <h2 style={{ marginTop: 40 }}>
           HISTORY ACCEPTED THE REVISION
         </h2>
       </section>
@@ -129,11 +105,18 @@ export default function Home() {
   );
 }
 
-/* ---------- COMPONENTS ---------- */
+/* COMPONENT */
 
-function Background({ img, dark }: any) {
+function Scene({ img, children, dark }: any) {
   return (
-    <>
+    <section style={{
+      height: '100vh',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      position: 'relative',
+      textAlign: 'center'
+    }}>
       <div style={{
         position: 'absolute',
         inset: 0,
@@ -142,38 +125,26 @@ function Background({ img, dark }: any) {
         backgroundPosition: 'center',
         filter: 'grayscale(100%) brightness(0.5)'
       }} />
+
       <div style={{
         position: 'absolute',
         inset: 0,
         background: dark ? 'rgba(0,0,0,0.7)' : 'rgba(0,0,0,0.55)'
       }} />
-    </>
+
+      <div style={{
+        position: 'relative',
+        zIndex: 2,
+        maxWidth: 700,
+        padding: 20
+      }}>
+        {children}
+      </div>
+    </section>
   );
 }
 
-function Content({ children }: any) {
-  return (
-    <div style={{
-      position: 'relative',
-      zIndex: 2,
-      maxWidth: 700,
-      textAlign: 'center',
-      padding: 20
-    }}>
-      {children}
-    </div>
-  );
-}
-
-/* ---------- STYLES ---------- */
-
-const scene = {
-  height: '100vh',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  position: 'relative'
-};
+/* STYLES */
 
 const title = {
   fontSize: '72px',
