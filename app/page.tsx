@@ -22,7 +22,7 @@ export default function Home() {
     scroll();
   }, [started]);
 
-  // 🎬 TRIGGER SCENES (KEY FIX)
+  // 🎬 INTERSECTION OBSERVER (KEY FIX)
   useEffect(() => {
     const scenes = document.querySelectorAll('.scene');
 
@@ -34,7 +34,7 @@ export default function Home() {
           }
         });
       },
-      { threshold: 0.5 }
+      { threshold: 0.6 }
     );
 
     scenes.forEach(scene => observer.observe(scene));
@@ -49,10 +49,9 @@ export default function Home() {
 
     try {
       audio.volume = 1;
-      audio.currentTime = 0;
       await audio.play();
     } catch (err) {
-      console.log("audio failed", err);
+      console.log(err);
     }
   };
 
@@ -61,7 +60,7 @@ export default function Home() {
 
       <audio ref={audioRef} src="/ambient.mp3" loop preload="auto" />
 
-      {/* START SCREEN */}
+      {/* START */}
       {!started && (
         <div style={{
           position: 'fixed',
@@ -72,17 +71,7 @@ export default function Home() {
           justifyContent: 'center',
           zIndex: 100
         }}>
-          <button
-            onClick={startExperience}
-            style={{
-              border: '1px solid #efe7d6',
-              background: 'transparent',
-              color: '#efe7d6',
-              padding: '16px 32px',
-              letterSpacing: '3px',
-              cursor: 'pointer'
-            }}
-          >
+          <button onClick={startExperience} style={button}>
             BEGIN EXPERIENCE
           </button>
         </div>
@@ -91,33 +80,33 @@ export default function Home() {
       {/* SCENES */}
 
       <Scene img="/eugenics.jpg">
-        <h1 className="reveal r1 title">WHITEWASHED</h1>
-        <p className="reveal r2">She said she was poisoned.</p>
-        <p className="reveal r3 dim">They said she was mistaken.</p>
-        <p className="reveal r4 fade">The record was changed.</p>
+        <h1 className="line l1 title">WHITEWASHED</h1>
+        <p className="line l2">She said she was poisoned.</p>
+        <p className="line l3 dim">They said she was mistaken.</p>
+        <p className="line l4 fade">The record was changed.</p>
       </Scene>
 
       <Scene img="/newspaper.jpg">
-        <h2 className="reveal r1">1905</h2>
-        <p className="reveal r2">The first report confirmed poisoning.</p>
-        <p className="reveal r3 dim">The second erased it.</p>
-        <p className="reveal r4 fade">What happened in between is the story.</p>
+        <h2 className="line l1">1905</h2>
+        <p className="line l2">The first report confirmed poisoning.</p>
+        <p className="line l3 dim">The second erased it.</p>
+        <p className="line l4 fade">What happened in between is the story.</p>
       </Scene>
 
       <Scene img="/bertha.jpg">
-        <p className="reveal r1 dim">She was there.</p>
-        <h2 className="reveal r2">BERTHA BERNER</h2>
-        <p className="reveal r3">Secretary. Witness. Keeper of the story.</p>
+        <p className="line l1 dim">She was there.</p>
+        <h2 className="line l2">BERTHA BERNER</h2>
+        <p className="line l3">Secretary. Witness. Keeper of the story.</p>
       </Scene>
 
       <Scene img="/jordan.jpg" dark>
-        <p className="reveal r1 dim">At the center of the institution:</p>
-        <h2 className="reveal r2">DAVID STARR JORDAN</h2>
-        <p className="reveal r3">President of Stanford University.</p>
+        <p className="line l1 dim">At the center of the institution:</p>
+        <h2 className="line l2">DAVID STARR JORDAN</h2>
+        <p className="line l3">President of Stanford University.</p>
       </Scene>
 
       <Scene img="/stanford.jpg">
-        <p className="reveal r1">
+        <p className="line l1">
           The institution endured.<br />
           The narrative stabilized.<br />
           The record remained.
@@ -125,11 +114,10 @@ export default function Home() {
       </Scene>
 
       <section style={{ padding: '120px 20px', textAlign: 'center' }}>
-        <p className="reveal r1">The diagnosis changed.</p>
-        <p className="reveal r2">The evidence shifted.</p>
-        <p className="reveal r3">The story remained.</p>
-
-        <h2 className="reveal r4" style={{ marginTop: 40 }}>
+        <p className="line l1">The diagnosis changed.</p>
+        <p className="line l2">The evidence shifted.</p>
+        <p className="line l3">The story remained.</p>
+        <h2 className="line l4" style={{ marginTop: 40 }}>
           HISTORY ACCEPTED THE REVISION
         </h2>
       </section>
@@ -145,19 +133,16 @@ export default function Home() {
           text-align: center;
         }
 
-        .reveal {
+        .line {
           opacity: 0;
           transform: translateY(20px);
         }
 
-        .scene.visible .reveal {
-          animation: fadeUp 1s forwards;
-        }
-
-        .scene.visible .r1 { animation-delay: 0.3s; }
-        .scene.visible .r2 { animation-delay: 1.5s; }
-        .scene.visible .r3 { animation-delay: 2.7s; }
-        .scene.visible .r4 { animation-delay: 3.9s; }
+        /* 🚨 KEY: animation only when visible */
+        .scene.visible .l1 { animation: fadeUp 1s forwards 0.3s; }
+        .scene.visible .l2 { animation: fadeUp 1s forwards 1.6s; }
+        .scene.visible .l3 { animation: fadeUp 1s forwards 2.9s; }
+        .scene.visible .l4 { animation: fadeUp 1s forwards 4.2s; }
 
         @keyframes fadeUp {
           to {
@@ -179,24 +164,17 @@ function Scene({ img, children, dark }: any) {
       <div style={{
         position: 'absolute',
         inset: 0,
-        backgroundImage: \`url(\${img})\`,
+        backgroundImage: `url(${img})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         filter: 'grayscale(100%) brightness(0.5)'
       }} />
-
       <div style={{
         position: 'absolute',
         inset: 0,
         background: dark ? 'rgba(0,0,0,0.7)' : 'rgba(0,0,0,0.55)'
       }} />
-
-      <div style={{
-        position: 'relative',
-        zIndex: 2,
-        maxWidth: 700,
-        padding: 20
-      }}>
+      <div style={{ position: 'relative', zIndex: 2, maxWidth: 700 }}>
         {children}
       </div>
     </section>
@@ -204,6 +182,15 @@ function Scene({ img, children, dark }: any) {
 }
 
 /* STYLES */
+
+const button = {
+  border: '1px solid #efe7d6',
+  background: 'transparent',
+  color: '#efe7d6',
+  padding: '16px 32px',
+  letterSpacing: '3px',
+  cursor: 'pointer'
+};
 
 const title = {
   fontSize: '72px',
