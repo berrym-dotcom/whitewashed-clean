@@ -1,59 +1,34 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 
 export default function Home() {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [started, setStarted] = useState(false);
-  const [scrolling, setScrolling] = useState(false);
 
   const startExperience = async () => {
     setStarted(true);
-
-    // 🔥 tell layout to show menu
-    window.dispatchEvent(new Event('experience-started'));
-
-    // delay scroll
-    setTimeout(() => {
-      setScrolling(true);
-    }, 1200);
 
     try {
       await audioRef.current?.play();
     } catch {}
   };
 
-  useEffect(() => {
-    if (!scrolling) return;
-
-    let scrollY = 0;
-    const speed = 0.4;
-
-    const scroll = () => {
-      scrollY += speed;
-      window.scrollTo(0, scrollY);
-      requestAnimationFrame(scroll);
-    };
-
-    scroll();
-  }, [scrolling]);
-
-  // 🔴 HARD STOP — NOTHING RENDERS BEFORE START
-  if (!started) {
-    return (
-      <main style={startScreen}>
-        <button onClick={startExperience} style={button}>
-          BEGIN EXPERIENCE
-        </button>
-      </main>
-    );
-  }
-
   return (
     <main style={{ backgroundColor: '#000', color: '#efe7d6' }}>
 
       <audio ref={audioRef} src="/ambient.mp3" loop />
 
+      {/* 🔥 FULL SCREEN BLACK COVER */}
+      {!started && (
+        <div style={cover}>
+          <button onClick={startExperience} style={button}>
+            BEGIN EXPERIENCE
+          </button>
+        </div>
+      )}
+
+      {/* FILM */}
       <section style={scene}>
         <div style={bg('/jordan.jpg')} />
         <div style={overlay} />
@@ -78,13 +53,14 @@ export default function Home() {
 
 /* ---------- STYLES ---------- */
 
-const startScreen = {
+const cover = {
   position: 'fixed',
   inset: 0,
   backgroundColor: '#000',
   display: 'flex',
   alignItems: 'center',
-  justifyContent: 'center'
+  justifyContent: 'center',
+  zIndex: 9999 // 👈 this hides menu AND DSJ
 } as any;
 
 const button = {
