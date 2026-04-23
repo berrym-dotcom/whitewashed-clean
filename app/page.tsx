@@ -7,11 +7,10 @@ export default function Home() {
   const [started, setStarted] = useState(false);
   const [scrolling, setScrolling] = useState(false);
 
-  // Start experience
   const startExperience = async () => {
     setStarted(true);
 
-    // delay before scroll starts (fixes abrupt jump)
+    // delay before scroll starts
     setTimeout(() => {
       setScrolling(true);
     }, 1200);
@@ -21,7 +20,6 @@ export default function Home() {
     } catch {}
   };
 
-  // Smooth scroll
   useEffect(() => {
     if (!scrolling) return;
 
@@ -52,24 +50,26 @@ export default function Home() {
         </div>
       )}
 
-      {/* JORDAN SCENE */}
-      <section style={scene}>
-        <div style={bg('/jordan.jpg')} />
-        <div style={overlay} />
+      {/* ONLY SHOW FILM AFTER START */}
+      {started && (
+        <section style={scene}>
+          <div style={bg('/jordan.jpg')} />
+          <div style={overlay} />
 
-        <div style={content}>
-          <p style={line}>DAVID STARR JORDAN</p>
-          <p style={line}>President of Stanford University</p>
+          <div style={content}>
+            <p style={line}>DAVID STARR JORDAN</p>
+            <p style={line}>President of Stanford University</p>
 
-          <p style={lineStrong}>
-            Scientist. Administrator. Ideologue.
-          </p>
+            <p style={lineStrong}>
+              Scientist. Administrator. Ideologue.
+            </p>
 
-          <p style={lineDim}>
-            And a man who shaped the official record
-          </p>
-        </div>
-      </section>
+            <p style={lineDim}>
+              And a man who shaped the official record
+            </p>
+          </div>
+        </section>
+      )}
 
     </main>
   );
