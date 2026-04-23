@@ -10,7 +10,10 @@ export default function Home() {
   const startExperience = async () => {
     setStarted(true);
 
-    // small pause before scroll begins
+    // 🔥 tell layout to show menu
+    window.dispatchEvent(new Event('experience-started'));
+
+    // delay scroll
     setTimeout(() => {
       setScrolling(true);
     }, 1200);
@@ -35,7 +38,7 @@ export default function Home() {
     scroll();
   }, [scrolling]);
 
-  // 🔴 CRITICAL: If not started, render ONLY black screen
+  // 🔴 HARD STOP — NOTHING RENDERS BEFORE START
   if (!started) {
     return (
       <main style={startScreen}>
@@ -46,7 +49,6 @@ export default function Home() {
     );
   }
 
-  // ✅ Only after start do we render the film
   return (
     <main style={{ backgroundColor: '#000', color: '#efe7d6' }}>
 
