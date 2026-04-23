@@ -1,10 +1,35 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+
+function Scene({ children }: any) {
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => {
+      const trigger = window.innerHeight * 0.85;
+      const elements = document.querySelectorAll('.scene');
+
+      elements.forEach((el: any) => {
+        const top = el.getBoundingClientRect().top;
+        if (top < trigger) {
+          el.classList.add('visible');
+        }
+      });
+    };
+
+    window.addEventListener('scroll', onScroll);
+    onScroll();
+
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  return <section className="scene">{children}</section>;
+}
+
 export default function Home() {
   return (
-    <main style={{
-      fontFamily: 'Georgia, serif',
-      background: '#000',
-      color: '#efe7d6'
-    }}>
+    <main style={{ fontFamily: 'Georgia, serif', background: '#000', color: '#efe7d6' }}>
 
       {/* NAV */}
       <nav style={{
@@ -22,176 +47,160 @@ export default function Home() {
         <a href="/contact">CONTACT</a>
       </nav>
 
-      {/* ================= SCENE 1 — IDEOLOGY ================= */}
-      <section style={{ height: '100vh', position: 'relative' }}>
-        <div style={{
-          position: 'absolute',
-          inset: 0,
-          backgroundImage: 'url(/eugenics.jpg)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          filter: 'blur(2px) brightness(0.4)',
-          transform: 'scale(1.05)'
-        }} />
-        <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.6)' }} />
+      {/* HERO */}
+      <Scene>
+        <div className="bg" style={{ backgroundImage: 'url(/eugenics.jpg)' }} />
+        <div className="overlay" />
 
-        <div style={{
-          position: 'relative',
-          zIndex: 2,
-          height: '100%',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          textAlign: 'center'
-        }}>
-          <h1 style={{ fontSize: '72px', letterSpacing: '6px', marginBottom: '30px' }}>
-            WHITEWASHED
-          </h1>
-
-          <p style={{ opacity: 0.85 }}>She said she was poisoned.</p>
-          <p style={{ opacity: 0.65 }}>They said she was mistaken.</p>
-          <p style={{ opacity: 0.45 }}>The record was changed.</p>
+        <div className="content">
+          <h1>WHITEWASHED</h1>
+          <p>She said she was poisoned.</p>
+          <p className="dim">They said she was mistaken.</p>
+          <p className="fade">The record was changed.</p>
         </div>
-      </section>
+      </Scene>
 
-      {/* ================= SCENE 2 — NEWSPAPER ================= */}
-      <section style={{ height: '100vh', position: 'relative' }}>
-        <div style={{
-          position: 'absolute',
-          inset: 0,
-          backgroundImage: 'url(/newspaper.jpg)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          filter: 'grayscale(100%) brightness(0.5)'
-        }} />
+      {/* NEWSPAPER */}
+      <Scene>
+        <div className="bg" style={{ backgroundImage: 'url(/newspaper.jpg)' }} />
+        <div className="overlay" />
 
-        <div style={{
-          position: 'relative',
-          zIndex: 2,
-          height: '100%',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          textAlign: 'center'
-        }}>
-          <div>
-            <h2 style={{ marginBottom: 20 }}>1905</h2>
-            <p>The first report confirmed poisoning.</p>
-            <p style={{ opacity: 0.6 }}>The second erased it.</p>
-            <p style={{ opacity: 0.4 }}>What happened in between is the story.</p>
-          </div>
+        <div className="content">
+          <h2>1905</h2>
+          <p>The first report confirmed poisoning.</p>
+          <p className="dim">The second erased it.</p>
+          <p className="fade">What happened in between is the story.</p>
         </div>
-      </section>
+      </Scene>
 
-      {/* ================= SCENE 3 — BERTHA ================= */}
-      <section style={{ height: '100vh', position: 'relative' }}>
-        <div style={{
-          position: 'absolute',
-          inset: 0,
-          backgroundImage: 'url(/bertha.jpg)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          filter: 'grayscale(100%) brightness(0.55)'
-        }} />
+      {/* BERTHA */}
+      <Scene>
+        <div className="bg" style={{ backgroundImage: 'url(/bertha.jpg)' }} />
+        <div className="overlay" />
 
-        <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.55)' }} />
-
-        <div style={{
-          position: 'relative',
-          zIndex: 2,
-          height: '100%',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          textAlign: 'center'
-        }}>
-          <div>
-            <p style={{ opacity: 0.7 }}>She was there.</p>
-            <h2 style={{ fontSize: '32px', letterSpacing: '3px' }}>
-              BERTHA BERNER
-            </h2>
-            <p style={{ opacity: 0.7 }}>
-              Secretary. Witness. Keeper of the story.
-            </p>
-          </div>
+        <div className="content">
+          <p className="dim">She was there.</p>
+          <h2>BERTHA BERNER</h2>
+          <p>Secretary. Witness. Keeper of the story.</p>
         </div>
-      </section>
+      </Scene>
 
-      {/* ================= SCENE 4 — JORDAN ================= */}
-      <section style={{ height: '100vh', position: 'relative' }}>
-        <div style={{
-          position: 'absolute',
-          inset: 0,
-          backgroundImage: 'url(/jordan.jpg)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          filter: 'grayscale(100%) brightness(0.5)'
-        }} />
+      {/* JORDAN */}
+      <Scene>
+        <div className="bg" style={{ backgroundImage: 'url(/jordan.jpg)' }} />
+        <div className="overlay dark" />
 
-        <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.65)' }} />
-
-        <div style={{
-          position: 'relative',
-          zIndex: 2,
-          height: '100%',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          textAlign: 'center'
-        }}>
-          <div>
-            <p style={{ opacity: 0.6 }}>At the center of the institution:</p>
-            <h2 style={{ fontSize: '32px', letterSpacing: '3px' }}>
-              DAVID STARR JORDAN
-            </h2>
-            <p style={{ opacity: 0.7 }}>
-              President of Stanford University.
-            </p>
-          </div>
+        <div className="content">
+          <p className="dim">At the center of the institution:</p>
+          <h2>DAVID STARR JORDAN</h2>
+          <p>President of Stanford University.</p>
         </div>
-      </section>
+      </Scene>
 
-      {/* ================= SCENE 5 — STANFORD ================= */}
-      <section style={{ height: '100vh', position: 'relative' }}>
-        <div style={{
-          position: 'absolute',
-          inset: 0,
-          backgroundImage: 'url(/stanford.jpg)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          filter: 'grayscale(100%) brightness(0.6)'
-        }} />
+      {/* STANFORD */}
+      <Scene>
+        <div className="bg" style={{ backgroundImage: 'url(/stanford.jpg)' }} />
+        <div className="overlay" />
 
-        <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.5)' }} />
-
-        <div style={{
-          position: 'relative',
-          zIndex: 2,
-          height: '100%',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          textAlign: 'center'
-        }}>
-          <p style={{ fontSize: '22px', maxWidth: '700px' }}>
-            The institution endured.  
-            The narrative stabilized.  
+        <div className="content">
+          <p>
+            The institution endured.<br />
+            The narrative stabilized.<br />
             The record remained.
           </p>
         </div>
-      </section>
+      </Scene>
 
-      {/* ================= FINAL ================= */}
-      <section style={{ padding: '140px 20px', textAlign: 'center' }}>
-        <p>The diagnosis changed.</p>
-        <p>The evidence shifted.</p>
-        <p style={{ marginBottom: 40 }}>The story remained.</p>
+      {/* FINAL */}
+      <Scene>
+        <div className="content">
+          <p>The diagnosis changed.</p>
+          <p>The evidence shifted.</p>
+          <p>The story remained.</p>
 
-        <p style={{ fontSize: '26px', letterSpacing: '2px', opacity: 0.8 }}>
-          HISTORY ACCEPTED THE REVISION
-        </p>
-      </section>
+          <h2 className="final">
+            HISTORY ACCEPTED THE REVISION
+          </h2>
+        </div>
+      </Scene>
+
+      {/* ================= STYLES ================= */}
+      <style>{`
+        .scene {
+          position: relative;
+          height: 100vh;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          text-align: center;
+          overflow: hidden;
+          opacity: 0;
+          transform: translateY(40px);
+          transition: all 1.6s ease;
+        }
+
+        .scene.visible {
+          opacity: 1;
+          transform: translateY(0);
+        }
+
+        .bg {
+          position: absolute;
+          inset: 0;
+          background-size: cover;
+          background-position: center;
+          filter: grayscale(100%) brightness(0.5);
+          transform: scale(1.05);
+          transition: transform 6s ease;
+        }
+
+        .scene.visible .bg {
+          transform: scale(1.1);
+        }
+
+        .overlay {
+          position: absolute;
+          inset: 0;
+          background: rgba(0,0,0,0.55);
+        }
+
+        .overlay.dark {
+          background: rgba(0,0,0,0.7);
+        }
+
+        .content {
+          position: relative;
+          z-index: 2;
+          max-width: 700px;
+          padding: 20px;
+        }
+
+        h1 {
+          font-size: 72px;
+          letter-spacing: 6px;
+          margin-bottom: 30px;
+        }
+
+        h2 {
+          font-size: 32px;
+          letter-spacing: 3px;
+          margin-bottom: 20px;
+        }
+
+        .dim {
+          opacity: 0.6;
+        }
+
+        .fade {
+          opacity: 0.4;
+        }
+
+        .final {
+          margin-top: 40px;
+          letter-spacing: 2px;
+          opacity: 0.8;
+        }
+      `}</style>
 
     </main>
   );
