@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export default function Home() {
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -14,12 +14,29 @@ export default function Home() {
     } catch {}
   };
 
+  // smooth auto scroll
+  useEffect(() => {
+    if (!started) return;
+
+    let scrollY = 0;
+    const speed = 0.35;
+
+    const scroll = () => {
+      scrollY += speed;
+      window.scrollTo(0, scrollY);
+      requestAnimationFrame(scroll);
+    };
+
+    scroll();
+  }, [started]);
+
   return (
     <main style={{ backgroundColor: '#000', color: '#efe7d6' }}>
 
+      {/* 🎵 MUSIC */}
       <audio ref={audioRef} src="/ambient.mp3" loop />
 
-      {/* 🔥 FULL SCREEN BLACK COVER */}
+      {/* 🎬 START SCREEN */}
       {!started && (
         <div style={cover}>
           <button onClick={startExperience} style={button}>
@@ -28,26 +45,56 @@ export default function Home() {
         </div>
       )}
 
-      {/* FILM */}
-      <section style={scene}>
-        <div style={bg('/jordan.jpg')} />
-        <div style={overlay} />
+      {/* 🎞 FILM */}
+      {started && (
+        <>
+          <Scene title="WHITEWASHED" />
 
-        <div style={content}>
-          <p style={line}>DAVID STARR JORDAN</p>
-          <p style={line}>President of Stanford University</p>
+          <Scene
+            img="/eugenics.jpg"
+            text="A belief system disguised as science."
+          />
 
-          <p style={lineStrong}>
-            Scientist. Administrator. Ideologue.
-          </p>
+          <Scene
+            img="/newspaper.jpg"
+            text="The story changed."
+          />
 
-          <p style={lineDim}>
-            And a man who shaped the official record
-          </p>
-        </div>
-      </section>
+          <Scene
+            img="/bertha.jpg"
+            text="Bertha Berner knew the truth."
+          />
 
+          <Scene
+            img="/jordan.jpg"
+            sub="DAVID STARR JORDAN"
+            text="Scientist. Administrator. Ideologue."
+          />
+
+          <Scene
+            img="/stanford.jpg"
+            text="The institution moved forward."
+          />
+        </>
+      )}
     </main>
+  );
+}
+
+/* ---------- SCENE ---------- */
+
+function Scene({ img, text, title, sub }: any) {
+  return (
+    <section style={scene}>
+      {img && <div style={bg(img)} />}
+      <div style={overlay} />
+
+      <div style={content}>
+        {title && <h1 style={titleStyle}>{title}</h1>}
+        {sub && <p style={subStyle}>{sub}</p>}
+        {text && <p style={textStyle}>{text}</p>}
+      </div>
+    </section>
   );
 }
 
@@ -60,7 +107,7 @@ const cover = {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  zIndex: 9999 // 👈 this hides menu AND DSJ
+  zIndex: 9999 // covers menu until start
 } as any;
 
 const button = {
@@ -102,18 +149,18 @@ const content = {
   maxWidth: 700
 } as any;
 
-const line = {
-  margin: '10px 0',
-  fontSize: '16px'
+const titleStyle = {
+  fontSize: '64px',
+  letterSpacing: '6px'
 } as any;
 
-const lineStrong = {
-  margin: '16px 0',
-  fontSize: '18px',
-  letterSpacing: '2px'
+const subStyle = {
+  marginTop: '10px',
+  fontSize: '14px',
+  opacity: 0.7
 } as any;
 
-const lineDim = {
+const textStyle = {
   marginTop: '20px',
-  opacity: 0.6
+  fontSize: '18px'
 } as any;
