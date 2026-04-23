@@ -1,33 +1,27 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 function Scene({ children }: any) {
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    const onScroll = () => {
-      const trigger = window.innerHeight * 0.85;
-      const elements = document.querySelectorAll('.scene');
-
-      elements.forEach((el: any) => {
-        const top = el.getBoundingClientRect().top;
-        if (top < trigger) {
-          el.classList.add('visible');
-        }
-      });
-    };
-
-    window.addEventListener('scroll', onScroll);
-    onScroll();
-
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
-
   return <section className="scene">{children}</section>;
 }
 
 export default function Home() {
+
+  // 🎬 AUTO SCROLL
+  useEffect(() => {
+    let scrollY = 0;
+    let speed = 0.3; // adjust pacing here
+
+    const autoScroll = () => {
+      scrollY += speed;
+      window.scrollTo(0, scrollY);
+      requestAnimationFrame(autoScroll);
+    };
+
+    autoScroll();
+  }, []);
+
   return (
     <main style={{ fontFamily: 'Georgia, serif', background: '#000', color: '#efe7d6' }}>
 
@@ -53,7 +47,8 @@ export default function Home() {
         <div className="overlay" />
 
         <div className="content">
-          <h1>WHITEWASHED</h1>
+          <h1 className="title">WHITEWASHED</h1>
+
           <p>She said she was poisoned.</p>
           <p className="dim">They said she was mistaken.</p>
           <p className="fade">The record was changed.</p>
@@ -126,6 +121,11 @@ export default function Home() {
 
       {/* ================= STYLES ================= */}
       <style>{`
+
+        html {
+          scroll-behavior: smooth;
+        }
+
         .scene {
           position: relative;
           height: 100vh;
@@ -134,14 +134,6 @@ export default function Home() {
           justify-content: center;
           text-align: center;
           overflow: hidden;
-          opacity: 0;
-          transform: translateY(40px);
-          transition: all 1.6s ease;
-        }
-
-        .scene.visible {
-          opacity: 1;
-          transform: translateY(0);
         }
 
         .bg {
@@ -151,11 +143,6 @@ export default function Home() {
           background-position: center;
           filter: grayscale(100%) brightness(0.5);
           transform: scale(1.05);
-          transition: transform 6s ease;
-        }
-
-        .scene.visible .bg {
-          transform: scale(1.1);
         }
 
         .overlay {
@@ -175,15 +162,17 @@ export default function Home() {
           padding: 20px;
         }
 
-        h1 {
+        /* 🎬 FIXED TITLE KERNING */
+        .title {
           font-size: 72px;
-          letter-spacing: 6px;
+          letter-spacing: 3px;
           margin-bottom: 30px;
+          transform: scaleX(0.96); /* subtle tightening */
         }
 
         h2 {
           font-size: 32px;
-          letter-spacing: 3px;
+          letter-spacing: 2px;
           margin-bottom: 20px;
         }
 
@@ -200,6 +189,7 @@ export default function Home() {
           letter-spacing: 2px;
           opacity: 0.8;
         }
+
       `}</style>
 
     </main>
