@@ -1,113 +1,186 @@
-'use client';
-
-import { useEffect, useState } from 'react';
-
 export default function Home() {
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    setTimeout(() => setVisible(true), 300);
-  }, []);
-
   return (
-    <main style={{ fontFamily: 'Georgia, serif', background: '#000', color: '#efe7d6' }}>
+    <main style={{
+      fontFamily: 'Georgia, serif',
+      background: '#000',
+      color: '#efe7d6',
+      minHeight: '100vh',
+      position: 'relative',
+      overflow: 'hidden'
+    }}>
 
-      {/* ================= HERO ================= */}
-      <section style={{ height: '100vh', position: 'relative', overflow: 'hidden' }}>
-        <div style={{ position: 'absolute', inset: 0, backgroundImage: "url('/eugenics.jpg')", backgroundSize: 'cover', backgroundPosition: 'center', filter: 'contrast(1.3) brightness(0.6) blur(2px)', transform: visible ? 'scale(1.08)' : 'scale(1.02)', transition: 'transform 8s ease-out' }} />
+      {/* NAV */}
+      <nav style={{
+        position: 'fixed',
+        top: 20,
+        right: 40,
+        zIndex: 10,
+        fontSize: '12px',
+        letterSpacing: '2px'
+      }}>
+        <a href="/" style={{ marginRight: 20 }}>HOME</a>
+        <a href="/about" style={{ marginRight: 20 }}>ABOUT</a>
+        <a href="/film" style={{ marginRight: 20 }}>FILM</a>
+        <a href="/epk" style={{ marginRight: 20 }}>EPK</a>
+        <a href="/contact">CONTACT</a>
+      </nav>
 
-        <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at center, rgba(0,0,0,0.6), rgba(0,0,0,0.92))' }} />
+      {/* ================= SCENE 1 — IDEOLOGY ================= */}
+      <section style={{ height: '100vh', position: 'relative' }}>
 
-        <div style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', textAlign: 'center' }}>
-          <h1 style={{ fontSize: '84px', letterSpacing: '6px', marginBottom: '40px', fontWeight: 500 }}>
+        <div style={{
+          position: 'absolute',
+          inset: 0,
+          backgroundImage: 'url(/eugenics.jpg)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          filter: 'blur(2px) brightness(0.35)',
+          transform: 'scale(1.05)'
+        }} />
+
+        <div style={{
+          position: 'absolute',
+          inset: 0,
+          background: 'rgba(0,0,0,0.65)'
+        }} />
+
+        <div style={{
+          position: 'relative',
+          zIndex: 2,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          height: '100%',
+          textAlign: 'center',
+          padding: '40px'
+        }}>
+
+          <h1 style={{
+            fontSize: '72px',
+            letterSpacing: '6px',
+            marginBottom: '30px'
+          }}>
             WHITEWASHED
           </h1>
 
-          <p>She said she was poisoned.</p>
-          <p style={{ opacity: 0.7 }}>They said she was mistaken.</p>
-          <p style={{ opacity: 0.5 }}>The record was changed.</p>
+          <p style={{ opacity: 0.8 }}>She said she was poisoned.</p>
+          <p style={{ opacity: 0.6 }}>They said she was mistaken.</p>
+          <p style={{ opacity: 0.4, marginBottom: 30 }}>The record was changed.</p>
+
+          <button style={{
+            border: '1px solid #efe7d6',
+            background: 'transparent',
+            color: '#efe7d6',
+            padding: '12px 28px',
+            letterSpacing: '2px',
+            cursor: 'pointer'
+          }}>
+            WATCH FILM
+          </button>
         </div>
       </section>
 
-      {/* ================= STORY ================= */}
-      <section style={{ padding: '120px 20px', maxWidth: '700px', margin: '0 auto' }}>
-        <p style={{ marginBottom: '30px', fontSize: '20px' }}>
-          In 1905, Jane Stanford died under suspicious circumstances.
-        </p>
+      {/* ================= SCENE 2 — EVIDENCE ================= */}
+      <section style={{
+        position: 'relative',
+        height: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        textAlign: 'center'
+      }}>
 
-        <p style={{ marginBottom: '30px', fontSize: '20px' }}>
-          The first diagnosis confirmed poisoning.
-        </p>
+        <div style={{
+          position: 'absolute',
+          inset: 0,
+          backgroundImage: 'url(/Call_Mrs-Stanford-is-Dead.jpeg)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          filter: 'grayscale(100%) brightness(0.4)'
+        }} />
 
-        <p style={{ marginBottom: '50px', fontSize: '20px' }}>
-          The second erased it.
-        </p>
+        <div style={{
+          position: 'relative',
+          zIndex: 2,
+          maxWidth: '700px'
+        }}>
+          <h2 style={{
+            fontSize: '28px',
+            letterSpacing: '2px',
+            marginBottom: '20px'
+          }}>
+            1905
+          </h2>
 
-        <p style={{ fontSize: '24px', letterSpacing: '2px', opacity: 0.8 }}>
-          OFFICIAL RECORD: NATURAL CAUSES
-        </p>
+          <p style={{ opacity: 0.85 }}>The first report confirmed poisoning.</p>
+          <p style={{ opacity: 0.65 }}>The second erased it.</p>
+          <p style={{ opacity: 0.45 }}>What happened in between is the story.</p>
+        </div>
       </section>
 
-      {/* ================= EVIDENCE ================= */}
-      <section style={{ padding: '120px 20px', background: '#050505' }}>
-        <div style={{ maxWidth: '700px', margin: '0 auto' }}>
+      {/* ================= SCENE 3 — INSTITUTION ================= */}
+      <section style={{
+        position: 'relative',
+        height: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        textAlign: 'center'
+      }}>
 
-          <p style={{ marginBottom: '30px', fontSize: '20px' }}>
-            Not all accounts matched.
+        <div style={{
+          position: 'absolute',
+          inset: 0,
+          backgroundImage: 'url(/stanford.jpg)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          filter: 'grayscale(100%) brightness(0.3)'
+        }} />
+
+        <div style={{
+          position: 'absolute',
+          inset: 0,
+          background: 'rgba(0,0,0,0.6)'
+        }} />
+
+        <div style={{
+          position: 'relative',
+          zIndex: 2,
+          maxWidth: '700px'
+        }}>
+          <p style={{ opacity: 0.6, marginBottom: 20 }}>
+            At the center of the institution:
           </p>
 
-          <p style={{ marginBottom: '30px', fontSize: '20px' }}>
-            Early descriptions of symptoms disappeared from later reports.
-          </p>
+          <h2 style={{
+            fontSize: '32px',
+            letterSpacing: '3px',
+            marginBottom: '20px'
+          }}>
+            DAVID STARR JORDAN
+          </h2>
 
-          <p style={{ marginBottom: '30px', fontSize: '20px' }}>
-            Statements were revised.
-          </p>
-
-          <p style={{ marginBottom: '50px', fontSize: '20px' }}>
-            Conclusions shifted over time.
-          </p>
-
-          <p style={{ fontSize: '24px', letterSpacing: '2px' }}>
-            THE RECORD DOES NOT HOLD
+          <p style={{ opacity: 0.7 }}>
+            President of Stanford University.
           </p>
         </div>
       </section>
 
-      {/* ================= POWER ================= */}
-      <section style={{ padding: '120px 20px', maxWidth: '700px', margin: '0 auto', textAlign: 'center' }}>
-        <p style={{ marginBottom: '30px', fontSize: '18px', opacity: 0.6 }}>
-          At the center of the institution:
-        </p>
+      {/* ================= FINAL ================= */}
+      <section style={{
+        padding: '120px 20px',
+        textAlign: 'center'
+      }}>
+        <p style={{ marginBottom: '20px' }}>The diagnosis changed.</p>
+        <p style={{ marginBottom: '20px' }}>The evidence shifted.</p>
+        <p style={{ marginBottom: '40px' }}>The story remained.</p>
 
-        <p style={{ fontSize: '28px', letterSpacing: '2px', marginBottom: '30px' }}>
-          DAVID STARR JORDAN
-        </p>
-
-        <p style={{ opacity: 0.7 }}>
-          President of Stanford University.
-        </p>
-
-        <p style={{ marginTop: '40px', opacity: 0.5 }}>
-          He helped define what would be remembered.
-        </p>
-      </section>
-
-      {/* ================= END HIT ================= */}
-      <section style={{ padding: '140px 20px', textAlign: 'center', background: '#000' }}>
-        <p style={{ fontSize: '22px', marginBottom: '30px' }}>
-          The diagnosis changed.
-        </p>
-
-        <p style={{ fontSize: '22px', marginBottom: '30px' }}>
-          The evidence shifted.
-        </p>
-
-        <p style={{ fontSize: '22px', marginBottom: '50px' }}>
-          The story remained.
-        </p>
-
-        <p style={{ fontSize: '26px', letterSpacing: '2px', opacity: 0.8 }}>
+        <p style={{
+          fontSize: '24px',
+          letterSpacing: '2px',
+          opacity: 0.8
+        }}>
           HISTORY ACCEPTED THE REVISION
         </p>
       </section>
