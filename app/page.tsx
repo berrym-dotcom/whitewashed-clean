@@ -1,16 +1,16 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import Link from 'next/link';
 
 export default function Home() {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [started, setStarted] = useState(false);
 
-  // START EXPERIENCE (smooth delay before scroll)
+  // START EXPERIENCE (smooth)
   const startExperience = async () => {
     setStarted(true);
 
+    // delay scroll to remove abrupt jump
     setTimeout(() => {
       startScroll();
     }, 1200);
@@ -20,10 +20,10 @@ export default function Home() {
     } catch {}
   };
 
-  // SMOOTH SCROLL
+  // SCROLL
   const startScroll = () => {
     let scrollY = 0;
-    const speed = 0.5;
+    const speed = 0.4;
 
     const scroll = () => {
       scrollY += speed;
@@ -35,19 +35,10 @@ export default function Home() {
   };
 
   return (
-    <main style={{ background: '#000', color: '#efe7d6', fontFamily: 'Georgia, serif' }}>
+    <main style={{ background: '#000', color: '#efe7d6' }}>
 
       {/* AUDIO */}
       <audio ref={audioRef} src="/ambient.mp3" loop />
-
-      {/* PERSISTENT MENU */}
-      <div style={topMenu}>
-        <Link href="/">HOME</Link>
-        <Link href="/film">FILM</Link>
-        <Link href="/about">ABOUT</Link>
-        <Link href="/epk">EPK</Link>
-        <Link href="/contact">CONTACT</Link>
-      </div>
 
       {/* START SCREEN */}
       {!started && (
@@ -59,100 +50,30 @@ export default function Home() {
       )}
 
       {/* JORDAN SCENE */}
-      <Scene img="/jordan.jpg">
-        <p className="line l1">DAVID STARR JORDAN</p>
-        <p className="line l2">President of Stanford University</p>
+      <section style={scene}>
+        <div style={bg('/jordan.jpg')} />
+        <div style={overlay} />
 
-        <p className="line l3 emphasis">
-          Scientist. Administrator. Ideologue.
-        </p>
+        <div style={content}>
+          <p style={line}>DAVID STARR JORDAN</p>
+          <p style={line}>President of Stanford University</p>
 
-        <p className="line l4 dim">
-          And a man who shaped the official record
-        </p>
-      </Scene>
+          <p style={lineStrong}>
+            Scientist. Administrator. Ideologue.
+          </p>
 
-      {/* STYLES */}
-      <style>{`
-        .scene {
-          height: 100vh;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          text-align: center;
-          position: relative;
-        }
-
-        .line {
-          opacity: 0;
-          transform: translateY(20px);
-        }
-
-        /* TIMING — TIGHTENED */
-        .l1 { animation: fadeUp 1s forwards 0.5s; }
-        .l2 { animation: fadeUp 1s forwards 1.6s; }
-        .l3 { animation: fadeUp 1s forwards 2.8s; }
-        .l4 { animation: fadeUp 1s forwards 4.2s; }
-
-        /* EMPHASIS LINE */
-        .emphasis {
-          letter-spacing: 2px;
-          font-size: 18px;
-        }
-
-        .dim {
-          opacity: 0.6;
-        }
-
-        @keyframes fadeUp {
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        a {
-          color: #efe7d6;
-          text-decoration: none;
-          opacity: 0.7;
-        }
-
-        a:hover {
-          opacity: 1;
-        }
-      `}</style>
+          <p style={lineDim}>
+            And a man who shaped the official record
+          </p>
+        </div>
+      </section>
 
     </main>
   );
 }
 
-/* SCENE COMPONENT */
-function Scene({ img, children }: any) {
-  return (
-    <section className="scene">
-      <div style={{
-        position: 'absolute',
-        inset: 0,
-        backgroundImage: `url(${img})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        filter: 'grayscale(100%) brightness(0.5)'
-      } as any} />
+/* ---------- STYLES ---------- */
 
-      <div style={{
-        position: 'absolute',
-        inset: 0,
-        background: 'rgba(0,0,0,0.6)'
-      } as any} />
-
-      <div style={{ position: 'relative', zIndex: 2 }}>
-        {children}
-      </div>
-    </section>
-  );
-}
-
-/* STYLES */
 const startScreen = {
   position: 'fixed',
   inset: 0,
@@ -168,16 +89,52 @@ const button = {
   padding: '16px 32px',
   letterSpacing: '3px',
   background: 'transparent',
-  color: '#efe7d6'
+  color: '#efe7d6',
+  cursor: 'pointer'
 } as any;
 
-const topMenu = {
-  position: 'fixed',
-  top: 20,
-  right: 30,
+const scene = {
+  height: '100vh',
   display: 'flex',
-  gap: '20px',
-  fontSize: '12px',
-  letterSpacing: '2px',
-  zIndex: 999
+  alignItems: 'center',
+  justifyContent: 'center',
+  textAlign: 'center',
+  position: 'relative'
+} as any;
+
+const bg = (img: string) => ({
+  position: 'absolute',
+  inset: 0,
+  backgroundImage: `url(${img})`,
+  backgroundSize: 'cover',
+  backgroundPosition: 'center',
+  filter: 'grayscale(100%) brightness(0.55)'
+} as any);
+
+const overlay = {
+  position: 'absolute',
+  inset: 0,
+  background: 'rgba(0,0,0,0.6)'
+} as any;
+
+const content = {
+  position: 'relative',
+  zIndex: 2,
+  maxWidth: 700
+} as any;
+
+const line = {
+  margin: '10px 0',
+  fontSize: '16px'
+} as any;
+
+const lineStrong = {
+  margin: '16px 0',
+  fontSize: '18px',
+  letterSpacing: '2px'
+} as any;
+
+const lineDim = {
+  marginTop: '20px',
+  opacity: 0.6
 } as any;
