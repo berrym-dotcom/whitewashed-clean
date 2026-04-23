@@ -1,202 +1,91 @@
-'use client';
+"use client";
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect } from "react";
 
 export default function Home() {
-  const audioRef = useRef<HTMLAudioElement>(null);
-  const [started, setStarted] = useState(false);
-
-  // AUTO SCROLL
   useEffect(() => {
-    if (!started) return;
+    const timer = setTimeout(() => {
+      document.body.classList.add("intro-finished");
+    }, 12000); // match your scroll duration
 
-    let scrollY = 0;
-    let speed = 0.8;
-
-    const scroll = () => {
-      scrollY += speed;
-      window.scrollTo(0, scrollY);
-      requestAnimationFrame(scroll);
-    };
-
-    scroll();
-  }, [started]);
-
-  // 🎬 INTERSECTION OBSERVER (KEY FIX)
-  useEffect(() => {
-    const scenes = document.querySelectorAll('.scene');
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-          }
-        });
-      },
-      { threshold: 0.6 }
-    );
-
-    scenes.forEach(scene => observer.observe(scene));
-    return () => observer.disconnect();
+    return () => clearTimeout(timer);
   }, []);
 
-  const startExperience = async () => {
-    setStarted(true);
-
-    const audio = audioRef.current;
-    if (!audio) return;
-
-    try {
-      audio.volume = 1;
-      await audio.play();
-    } catch (err) {
-      console.log(err);
-    }
+  const skipIntro = () => {
+    document.body.classList.add("intro-finished");
   };
 
   return (
-    <main style={{ fontFamily: 'Georgia, serif', background: '#000', color: '#efe7d6' }}>
+    <main className="bg-black text-white">
 
-      <audio ref={audioRef} src="/ambient.mp3" loop preload="auto" />
-
-      {/* START */}
-      {!started && (
-        <div style={{
-          position: 'fixed',
-          inset: 0,
-          background: '#000',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          zIndex: 100
-        }}>
-          <button onClick={startExperience} style={button}>
-            BEGIN EXPERIENCE
-          </button>
+      {/* INTRO SCROLL */}
+      <div
+        className="fixed inset-0 z-10 pointer-events-none"
+      >
+        <div className="absolute bottom-[-100%] w-full text-center text-2xl animate-scroll">
+          <p>Stanford University was built on a dream.</p>
+          <p>But behind the dream… something darker.</p>
+          <p className="mt-10 text-4xl">WHITEWASHED</p>
         </div>
-      )}
+      </div>
 
-      {/* SCENES */}
+      {/* MENU */}
+      <nav className="fixed top-5 right-8 z-[9999] flex gap-6 opacity-60 transition-opacity duration-500">
+        <a href="#film">Film</a>
+        <a href="#about">About</a>
+        <a href="#epk">EPK</a>
+        <button onClick={skipIntro}>Skip</button>
+      </nav>
 
-      <Scene img="/eugenics.jpg">
-        <h1 className="line l1 title">WHITEWASHED</h1>
-        <p className="line l2">She said she was poisoned.</p>
-        <p className="line l3 dim">They said she was mistaken.</p>
-        <p className="line l4 fade">The record was changed.</p>
-      </Scene>
+      {/* CONTENT */}
+      <div className="relative z-20">
 
-      <Scene img="/newspaper.jpg">
-        <h2 className="line l1">1905</h2>
-        <p className="line l2">The first report confirmed poisoning.</p>
-        <p className="line l3 dim">The second erased it.</p>
-        <p className="line l4 fade">What happened in between is the story.</p>
-      </Scene>
+        <section id="film" className="min-h-screen p-24">
+          <h1 className="text-4xl mb-4">WHITEWASHED</h1>
+          <p>Trailer coming soon.</p>
+        </section>
 
-      <Scene img="/bertha.jpg">
-        <p className="line l1 dim">She was there.</p>
-        <h2 className="line l2">BERTHA BERNER</h2>
-        <p className="line l3">Secretary. Witness. Keeper of the story.</p>
-      </Scene>
+        <section id="about" className="min-h-screen p-24">
+          <h1 className="text-4xl mb-4">About</h1>
+          <p>
+            WHITEWASHED explores power, eugenics, and institutional silence 
+            at Stanford University.
+          </p>
+        </section>
 
-      <Scene img="/jordan.jpg" dark>
-        <p className="line l1 dim">At the center of the institution:</p>
-        <h2 className="line l2">DAVID STARR JORDAN</h2>
-        <p className="line l3">President of Stanford University.</p>
-      </Scene>
+        <section id="epk" className="min-h-screen p-24">
+          <h1 className="text-4xl mb-4">EPK</h1>
+          <p>Press kit, stills, credits.</p>
+        </section>
 
-      <Scene img="/stanford.jpg">
-        <p className="line l1">
-          The institution endured.<br />
-          The narrative stabilized.<br />
-          The record remained.
-        </p>
-      </Scene>
+      </div>
 
-      <section style={{ padding: '120px 20px', textAlign: 'center' }}>
-        <p className="line l1">The diagnosis changed.</p>
-        <p className="line l2">The evidence shifted.</p>
-        <p className="line l3">The story remained.</p>
-        <h2 className="line l4" style={{ marginTop: 40 }}>
-          HISTORY ACCEPTED THE REVISION
-        </h2>
-      </section>
-
-      {/* STYLES */}
-      <style>{`
-        .scene {
-          height: 100vh;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          position: relative;
-          text-align: center;
+      {/* INLINE STYLES (so you don’t need to touch anything else) */}
+      <style jsx global>{`
+        body {
+          margin: 0;
+          background: black;
+          color: white;
         }
 
-        .line {
-          opacity: 0;
-          transform: translateY(20px);
-        }
-
-        /* 🚨 KEY: animation only when visible */
-        .scene.visible .l1 { animation: fadeUp 1s forwards 0.3s; }
-        .scene.visible .l2 { animation: fadeUp 1s forwards 1.6s; }
-        .scene.visible .l3 { animation: fadeUp 1s forwards 2.9s; }
-        .scene.visible .l4 { animation: fadeUp 1s forwards 4.2s; }
-
-        @keyframes fadeUp {
-          to {
-            opacity: 1;
-            transform: translateY(0);
+        @keyframes scrollUp {
+          from {
+            bottom: -100%;
           }
+          to {
+            bottom: 100%;
+          }
+        }
+
+        .animate-scroll {
+          animation: scrollUp 12s linear forwards;
+        }
+
+        body.intro-finished nav {
+          opacity: 1 !important;
         }
       `}</style>
 
     </main>
   );
 }
-
-/* COMPONENT */
-
-function Scene({ img, children, dark }: any) {
-  return (
-    <section className="scene">
-      <div style={{
-        position: 'absolute',
-        inset: 0,
-        backgroundImage: `url(${img})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        filter: 'grayscale(100%) brightness(0.5)'
-      }} />
-      <div style={{
-        position: 'absolute',
-        inset: 0,
-        background: dark ? 'rgba(0,0,0,0.7)' : 'rgba(0,0,0,0.55)'
-      }} />
-      <div style={{ position: 'relative', zIndex: 2, maxWidth: 700 }}>
-        {children}
-      </div>
-    </section>
-  );
-}
-
-/* STYLES */
-
-const button = {
-  border: '1px solid #efe7d6',
-  background: 'transparent',
-  color: '#efe7d6',
-  padding: '16px 32px',
-  letterSpacing: '3px',
-  cursor: 'pointer'
-};
-
-const title = {
-  fontSize: '72px',
-  letterSpacing: '3px',
-  transform: 'scaleX(0.96)'
-};
-
-const dim = { opacity: 0.6 };
-const fade = { opacity: 0.4 };
