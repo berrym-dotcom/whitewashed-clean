@@ -2,15 +2,14 @@ import Link from 'next/link';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html>
+    <html lang="en">
       <body style={{
+        margin: 0,
         background: '#000',
         color: '#efe7d6',
-        fontFamily: 'Georgia, serif',
-        margin: 0
+        fontFamily: 'Georgia, serif'
       }}>
 
-        {/* MENU THAT ALWAYS STAYS */}
         <nav style={{
           position: 'fixed',
           top: 20,
