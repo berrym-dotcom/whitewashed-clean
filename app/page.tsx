@@ -1,1 +1,221 @@
+'use client';
 
+import { useEffect, useRef, useState } from 'react';
+
+export default function Home() {
+  const audioRef = useRef<HTMLAudioElement>(null);
+  const [started, setStarted] = useState(false);
+
+  // AUTO SCROLL
+  useEffect(() => {
+    if (!started) return;
+
+    let scrollY = 0;
+    let speed = 0.8;
+
+    const scroll = () => {
+      scrollY += speed;
+      window.scrollTo(0, scrollY);
+      requestAnimationFrame(scroll);
+    };
+
+    scroll();
+  }, [started]);
+
+  // TRIGGER SCENES
+  useEffect(() => {
+    const scenes = document.querySelectorAll('.scene');
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      },
+      { threshold: 0.6 }
+    );
+
+    scenes.forEach(scene => observer.observe(scene));
+    return () => observer.disconnect();
+  }, []);
+
+  const startExperience = async () => {
+    setStarted(true);
+
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    try {
+      audio.volume = 1;
+      audio.currentTime = 0;
+      await audio.play();
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  return (
+    <main style={{ fontFamily: 'Georgia, serif', background: '#000', color: '#efe7d6' }}>
+
+      {/* AUDIO */}
+      <audio ref={audioRef} src="/ambient.mp3" loop preload="auto" />
+
+      {/* START SCREEN */}
+      {!started && (
+        <div style={{
+          position: 'fixed',
+          inset: 0,
+          background: '#000',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 100
+        }}>
+          <button
+            onClick={startExperience}
+            style={{
+              border: '1px solid #efe7d6',
+              background: 'transparent',
+              color: '#efe7d6',
+              padding: '16px 32px',
+              letterSpacing: '3px',
+              cursor: 'pointer'
+            }}
+          >
+            BEGIN EXPERIENCE
+          </button>
+        </div>
+      )}
+
+      {/* SCENE 1 */}
+      <Scene img="/eugenics.jpg">
+        <h1 className="line l1 title">WHITEWASHED</h1>
+        <p className="line l2">She said she was poisoned.</p>
+        <p className="line l3 dim">They said she was mistaken.</p>
+        <p className="line l4 fade">The record was changed.</p>
+      </Scene>
+
+      {/* SCENE 2 */}
+      <Scene img="/newspaper.jpg">
+        <h2 className="line l1">1905</h2>
+        <p className="line l2">The first report confirmed poisoning.</p>
+        <p className="line l3 dim">The second erased it.</p>
+        <p className="line l4 fade">What happened in between is the story.</p>
+      </Scene>
+
+      {/* SCENE 3 */}
+      <Scene img="/bertha.jpg">
+        <p className="line l1 dim">She was there.</p>
+        <h2 className="line l2">BERTHA BERNER</h2>
+        <p className="line l3">Secretary. Witness. Keeper of the story.</p>
+      </Scene>
+
+      {/* SCENE 4 */}
+      <Scene img="/jordan.jpg" dark>
+        <p className="line l1 dim">At the center of the institution:</p>
+        <h2 className="line l2">DAVID STARR JORDAN</h2>
+        <p className="line l3">President of Stanford University.</p>
+      </Scene>
+
+      {/* SCENE 5 */}
+      <Scene img="/stanford.jpg">
+        <p className="line l1">
+          The institution endured.<br />
+          The narrative stabilized.<br />
+          The record remained.
+        </p>
+      </Scene>
+
+      {/* END */}
+      <section style={{
+        height: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        textAlign: 'center'
+      }}>
+        <p className="line l1">The diagnosis changed.</p>
+        <p className="line l2">The evidence shifted.</p>
+        <p className="line l3">The story remained.</p>
+
+        <h2 className="line l4" style={{ marginTop: 40 }}>
+          HISTORY ACCEPTED THE REVISION
+        </h2>
+      </section>
+
+      {/* ANIMATION STYLES */}
+      <style>{`
+        .scene {
+          height: 100vh;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          position: relative;
+          text-align: center;
+        }
+
+        .line {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+
+        .scene.visible .l1 { animation: fadeUp 1s forwards 0.3s; }
+        .scene.visible .l2 { animation: fadeUp 1s forwards 1.6s; }
+        .scene.visible .l3 { animation: fadeUp 1s forwards 2.9s; }
+        .scene.visible .l4 { animation: fadeUp 1s forwards 4.2s; }
+
+        @keyframes fadeUp {
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+      `}</style>
+
+    </main>
+  );
+}
+
+/* SCENE COMPONENT */
+
+function Scene({ img, children, dark }: any) {
+  return (
+    <section className="scene">
+      <div style={{
+        position: 'absolute',
+        inset: 0,
+        backgroundImage: `url(${img})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        filter: 'grayscale(100%) brightness(0.5)'
+      }} />
+      <div style={{
+        position: 'absolute',
+        inset: 0,
+        background: dark ? 'rgba(0,0,0,0.7)' : 'rgba(0,0,0,0.55)'
+      }} />
+      <div style={{
+        position: 'relative',
+        zIndex: 2,
+        maxWidth: 700,
+        padding: 20
+      }}>
+        {children}
+      </div>
+    </section>
+  );
+}
+
+/* TEXT STYLES */
+
+const title = {
+  fontSize: '72px',
+  letterSpacing: '3px',
+  transform: 'scaleX(0.96)'
+};
+
+const dim = { opacity: 0.6 };
+const fade = { opacity: 0.4 };
