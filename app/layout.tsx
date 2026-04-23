@@ -1,6 +1,17 @@
+'use client';
+
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const [started, setStarted] = useState(false);
+
+  useEffect(() => {
+    const handleStart = () => setStarted(true);
+    window.addEventListener('experience-started', handleStart);
+    return () => window.removeEventListener('experience-started', handleStart);
+  }, []);
+
   return (
     <html lang="en">
       <body
@@ -12,25 +23,27 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         }}
       >
 
-        {/* GLOBAL MENU */}
-        <nav
-          style={{
-            position: 'fixed',
-            top: 20,
-            right: 30,
-            display: 'flex',
-            gap: '20px',
-            fontSize: '12px',
-            letterSpacing: '2px',
-            zIndex: 999,
-          }}
-        >
-          <Link href="/" style={linkStyle}>HOME</Link>
-          <Link href="/film" style={linkStyle}>FILM</Link>
-          <Link href="/about" style={linkStyle}>ABOUT</Link>
-          <Link href="/epk" style={linkStyle}>EPK</Link>
-          <Link href="/contact" style={linkStyle}>CONTACT</Link>
-        </nav>
+        {/* SHOW MENU ONLY AFTER START */}
+        {started && (
+          <nav
+            style={{
+              position: 'fixed',
+              top: 20,
+              right: 30,
+              display: 'flex',
+              gap: '20px',
+              fontSize: '12px',
+              letterSpacing: '2px',
+              zIndex: 999,
+            }}
+          >
+            <Link href="/" style={linkStyle}>HOME</Link>
+            <Link href="/film" style={linkStyle}>FILM</Link>
+            <Link href="/about" style={linkStyle}>ABOUT</Link>
+            <Link href="/epk" style={linkStyle}>EPK</Link>
+            <Link href="/contact" style={linkStyle}>CONTACT</Link>
+          </nav>
+        )}
 
         {children}
 
@@ -39,9 +52,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   );
 }
 
-/* LINK STYLE */
 const linkStyle = {
-  color: '#FFD700',        // bright yellow
+  color: '#FFD700',
   textDecoration: 'none',
   opacity: 0.85,
 } as any;
