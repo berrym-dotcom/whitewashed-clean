@@ -60,9 +60,15 @@ export default function Home() {
     return () => window.removeEventListener('scroll', checkScroll);
   }, [started]);
 
+  // LOWER AUDIO AT END
+  useEffect(() => {
+    if (showMenu && audioRef.current) {
+      audioRef.current.volume = 0.4;
+    }
+  }, [showMenu]);
+
   const startExperience = async () => {
     setStarted(true);
-
     try {
       await audioRef.current?.play();
     } catch {}
@@ -166,6 +172,11 @@ export default function Home() {
           to { opacity: 1; transform: translateY(0); }
         }
 
+        @keyframes fadeInMenu {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+
         a {
           color: #efe7d6;
           text-decoration: none;
@@ -184,29 +195,25 @@ export default function Home() {
 function Scene({ img, children }: any) {
   return (
     <section className="scene">
-      <div
-        style={{
-          position: 'absolute',
-          inset: 0,
-          backgroundImage: `url(${img})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          filter: 'grayscale(100%) brightness(0.5)',
-        } as any}
-      />
-      <div
-        style={{
-          position: 'absolute',
-          inset: 0,
-          background: 'rgba(0,0,0,0.55)',
-        } as any}
-      />
+      <div style={{
+        position: 'absolute',
+        inset: 0,
+        backgroundImage: `url(${img})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        filter: 'grayscale(100%) brightness(0.5)'
+      } as any} />
+      <div style={{
+        position: 'absolute',
+        inset: 0,
+        background: 'rgba(0,0,0,0.55)'
+      } as any} />
       <div className="content">{children}</div>
     </section>
   );
 }
 
-/* STYLE OBJECTS (FIXED) */
+/* STYLE OBJECTS */
 const startScreen = {
   position: 'fixed',
   inset: 0,
@@ -214,7 +221,7 @@ const startScreen = {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  zIndex: 100,
+  zIndex: 100
 } as any;
 
 const button = {
@@ -223,7 +230,7 @@ const button = {
   color: '#efe7d6',
   padding: '16px 32px',
   letterSpacing: '3px',
-  cursor: 'pointer',
+  cursor: 'pointer'
 } as any;
 
 const menu = {
@@ -235,12 +242,13 @@ const menu = {
   alignItems: 'center',
   justifyContent: 'center',
   zIndex: 200,
+  animation: 'fadeInMenu 2s ease forwards'
 } as any;
 
 const menuTitle = {
   fontSize: '28px',
   letterSpacing: '4px',
-  marginBottom: 40,
+  marginBottom: 40
 } as any;
 
 const menuLinks = {
@@ -248,5 +256,5 @@ const menuLinks = {
   gap: '40px',
   fontSize: '12px',
   letterSpacing: '3px',
-  opacity: 0.75,
+  opacity: 0.75
 } as any;
