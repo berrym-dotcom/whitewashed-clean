@@ -3,47 +3,112 @@ export default function Page() {
     <main style={{
       minHeight: '100vh',
       background: '#000',
-      color: '#efe7d6',
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
-      textAlign: 'center',
-      padding: '40px'
+      color: '#efe7d6',
+      fontFamily: 'Georgia, serif'
     }}>
 
-      <h1 style={{
-        fontSize: '32px',
-        letterSpacing: '4px',
-        marginBottom: '40px'
+      <p style={{
+        letterSpacing: '3px',
+        fontSize: '12px',
+        marginBottom: '20px',
+        opacity: 0.6
       }}>
-        FULL FILM
-      </h1>
+        PRIVATE SCREENING
+      </p>
 
-      {/* VIDEO PLACEHOLDER */}
       <div style={{
-        width: '80%',
-        maxWidth: '900px',
-        aspectRatio: '16 / 9',
-        background: '#111',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        border: '1px solid #333'
+        width: '90%',
+        maxWidth: '1000px',
+        aspectRatio: '16 / 9'
       }}>
-        <p style={{ opacity: 0.6 }}>
-          Film will appear here
-        </p>
-      </div>
+        <iframe
+          src="https://player.vimeo.com/video/export default function Page() {
+  return (
+    <main style={{
+      minHeight: '100vh',
+      background: '#000',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      color: '#efe7d6',
+      fontFamily: 'Georgia, serif'
+    }}>
 
       <p style={{
-        marginTop: '30px',
+        letterSpacing: '3px',
         fontSize: '12px',
-        letterSpacing: '2px',
-        opacity: 0.5
+        marginBottom: '20px',
+        opacity: 0.6
       }}>
-        Password protected screening
+        PRIVATE SCREENING
       </p>
+
+      <div style={{
+        width: '90%',
+        maxWidth: '1000px',
+        aspectRatio: '16 / 9'
+      }}>
+        <iframe
+          src="https://player.vimeo.com/video/export default function Page() {
+  return (
+    <main style={{
+      minHeight: '100vh',
+      background: '#000',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      color: '#efe7d6',
+      fontFamily: 'Georgia, serif'
+    }}>
+
+      <p style={{
+        letterSpacing: '3px',
+        fontSize: '12px',
+        marginBottom: '20px',
+        opacity: 0.6
+      }}>
+        PRIVATE SCREENING
+      </p>
+
+      <div style={{
+        width: '90%',
+        maxWidth: '1000px',
+        aspectRatio: '16 / 9'
+      }}>
+        <iframe
+          src="https://player.vimeo.com/video/https://vimeo.com/1129259990
+          style={{ width: '100%', height: '100%' }}
+          frameBorder="0"
+          allow="autoplay; fullscreen"
+          allowFullScreen
+        />
+      </div>
+
+    </main>
+  );
+}
+          style={{ width: '100%', height: '100%' }}
+          frameBorder="0"
+          allow="autoplay; fullscreen"
+          allowFullScreen
+        />
+      </div>
+
+    </main>
+  );
+}
+          style={{ width: '100%', height: '100%' }}
+          frameBorder="0"
+          allow="autoplay; fullscreen"
+          allowFullScreen
+        />
+      </div>
 
     </main>
   );
