@@ -6,7 +6,6 @@ export default function Home() {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [started, setStarted] = useState(false);
 
-  // AUTO SCROLL
   useEffect(() => {
     if (!started) return;
 
@@ -22,7 +21,6 @@ export default function Home() {
     scroll();
   }, [started]);
 
-  // SCENE TRIGGER
   useEffect(() => {
     const scenes = document.querySelectorAll('.scene');
 
@@ -55,40 +53,33 @@ export default function Home() {
     }
   };
 
-  const replay = () => {
-    window.location.reload();
-  };
-
   return (
     <main style={{ fontFamily: 'Georgia, serif', background: '#000', color: '#efe7d6' }}>
 
       <audio ref={audioRef} src="/ambient.mp3" loop preload="auto" />
 
-      {/* NAV */}
-      {started && (
+      {!started && (
         <div style={{
           position: 'fixed',
-          top: 20,
-          right: 30,
-          zIndex: 10,
-          fontSize: '12px',
-          letterSpacing: '2px',
-          opacity: 0.7
+          inset: 0,
+          background: '#000',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 100
         }}>
-          WHITEWASHED
-        </div>
-      )}
-
-      {/* START */}
-      {!started && (
-        <div style={startScreen}>
-          <button onClick={startExperience} style={button}>
+          <button onClick={startExperience} style={{
+            border: '1px solid #efe7d6',
+            background: 'transparent',
+            color: '#efe7d6',
+            padding: '16px 32px',
+            letterSpacing: '3px',
+            cursor: 'pointer'
+          }}>
             BEGIN EXPERIENCE
           </button>
         </div>
       )}
-
-      {/* FILM */}
 
       <Scene img="/eugenics.jpg">
         <h1 className="line l1 title">WHITEWASHED</h1>
@@ -124,8 +115,7 @@ export default function Home() {
         </p>
       </Scene>
 
-      {/* ENDING */}
-      <section style={ending}>
+      <section style={{ padding: '120px 20px', textAlign: 'center' }}>
         <p className="line l1">The diagnosis changed.</p>
         <p className="line l2">The evidence shifted.</p>
         <p className="line l3">The story remained.</p>
@@ -133,13 +123,8 @@ export default function Home() {
         <h2 className="line l4" style={{ marginTop: 40 }}>
           HISTORY ACCEPTED THE REVISION
         </h2>
-
-        <button onClick={replay} style={replayBtn}>
-          REPLAY
-        </button>
       </section>
 
-      {/* STYLES */}
       <style>{`
         .scene {
           height: 100vh;
@@ -172,8 +157,6 @@ export default function Home() {
   );
 }
 
-/* COMPONENT */
-
 function Scene({ img, children, dark }: any) {
   return (
     <section className="scene">
@@ -196,45 +179,6 @@ function Scene({ img, children, dark }: any) {
     </section>
   );
 }
-
-/* STYLES */
-
-const startScreen = {
-  position: 'fixed',
-  inset: 0,
-  background: '#000',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  zIndex: 100
-};
-
-const ending = {
-  height: '100vh',
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  justifyContent: 'center'
-};
-
-const button = {
-  border: '1px solid #efe7d6',
-  background: 'transparent',
-  color: '#efe7d6',
-  padding: '16px 32px',
-  letterSpacing: '3px',
-  cursor: 'pointer'
-};
-
-const replayBtn = {
-  marginTop: 40,
-  border: '1px solid #efe7d6',
-  background: 'transparent',
-  color: '#efe7d6',
-  padding: '10px 24px',
-  letterSpacing: '2px',
-  cursor: 'pointer'
-};
 
 const title = {
   fontSize: '72px',
