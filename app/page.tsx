@@ -2,16 +2,12 @@
 
 import { useEffect } from 'react';
 
-function Scene({ children }: any) {
-  return <section className="scene">{children}</section>;
-}
-
 export default function Home() {
 
-  // 🎬 AUTO SCROLL
+  // 🎬 AUTO SCROLL (FASTER)
   useEffect(() => {
     let scrollY = 0;
-    let speed = 0.25;
+    let speed = 0.8; // 🔥 faster (adjust 0.6–1.2)
 
     const autoScroll = () => {
       scrollY += speed;
@@ -22,41 +18,44 @@ export default function Home() {
     autoScroll();
   }, []);
 
+  // 🎬 SCENE TRIGGER (this fixes text timing)
+  useEffect(() => {
+    const scenes = document.querySelectorAll('.scene');
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      },
+      { threshold: 0.5 }
+    );
+
+    scenes.forEach(scene => observer.observe(scene));
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <main style={{ fontFamily: 'Georgia, serif', background: '#000', color: '#efe7d6' }}>
 
-      {/* NAV */}
-      <nav style={{
-        position: 'fixed',
-        top: 20,
-        right: 40,
-        zIndex: 10,
-        fontSize: '12px',
-        letterSpacing: '2px'
-      }}>
-        <a href="/" style={{ marginRight: 20 }}>HOME</a>
-        <a href="/about" style={{ marginRight: 20 }}>ABOUT</a>
-        <a href="/film" style={{ marginRight: 20 }}>FILM</a>
-        <a href="/epk" style={{ marginRight: 20 }}>EPK</a>
-        <a href="/contact">CONTACT</a>
-      </nav>
-
       {/* HERO */}
-      <Scene>
+      <section className="scene">
         <div className="bg" style={{ backgroundImage: 'url(/eugenics.jpg)' }} />
         <div className="overlay" />
 
         <div className="content">
           <h1 className="title reveal r1">WHITEWASHED</h1>
-
           <p className="reveal r2">She said she was poisoned.</p>
           <p className="reveal r3 dim">They said she was mistaken.</p>
           <p className="reveal r4 fade">The record was changed.</p>
         </div>
-      </Scene>
+      </section>
 
       {/* NEWSPAPER */}
-      <Scene>
+      <section className="scene">
         <div className="bg" style={{ backgroundImage: 'url(/newspaper.jpg)' }} />
         <div className="overlay" />
 
@@ -66,10 +65,10 @@ export default function Home() {
           <p className="reveal r3 dim">The second erased it.</p>
           <p className="reveal r4 fade">What happened in between is the story.</p>
         </div>
-      </Scene>
+      </section>
 
       {/* BERTHA */}
-      <Scene>
+      <section className="scene">
         <div className="bg" style={{ backgroundImage: 'url(/bertha.jpg)' }} />
         <div className="overlay" />
 
@@ -78,10 +77,10 @@ export default function Home() {
           <h2 className="reveal r2">BERTHA BERNER</h2>
           <p className="reveal r3">Secretary. Witness. Keeper of the story.</p>
         </div>
-      </Scene>
+      </section>
 
       {/* JORDAN */}
-      <Scene>
+      <section className="scene">
         <div className="bg" style={{ backgroundImage: 'url(/jordan.jpg)' }} />
         <div className="overlay dark" />
 
@@ -90,10 +89,10 @@ export default function Home() {
           <h2 className="reveal r2">DAVID STARR JORDAN</h2>
           <p className="reveal r3">President of Stanford University.</p>
         </div>
-      </Scene>
+      </section>
 
       {/* STANFORD */}
-      <Scene>
+      <section className="scene">
         <div className="bg" style={{ backgroundImage: 'url(/stanford.jpg)' }} />
         <div className="overlay" />
 
@@ -104,10 +103,10 @@ export default function Home() {
             The record remained.
           </p>
         </div>
-      </Scene>
+      </section>
 
       {/* FINAL */}
-      <Scene>
+      <section className="scene">
         <div className="content">
           <p className="reveal r1">The diagnosis changed.</p>
           <p className="reveal r2">The evidence shifted.</p>
@@ -117,7 +116,7 @@ export default function Home() {
             HISTORY ACCEPTED THE REVISION
           </h2>
         </div>
-      </Scene>
+      </section>
 
       {/* ================= STYLES ================= */}
       <style>{`
@@ -138,7 +137,6 @@ export default function Home() {
           background-size: cover;
           background-position: center;
           filter: grayscale(100%) brightness(0.5);
-          transform: scale(1.05);
         }
 
         .overlay {
@@ -171,13 +169,8 @@ export default function Home() {
           margin-bottom: 20px;
         }
 
-        .dim {
-          opacity: 0.6;
-        }
-
-        .fade {
-          opacity: 0.4;
-        }
+        .dim { opacity: 0.6; }
+        .fade { opacity: 0.4; }
 
         .final {
           margin-top: 40px;
@@ -185,17 +178,20 @@ export default function Home() {
           opacity: 0.8;
         }
 
-        /* 🎬 TEXT TIMING */
+        /* 🔥 FIXED REVEAL SYSTEM */
         .reveal {
           opacity: 0;
           transform: translateY(20px);
-          animation: fadeUp 1.2s forwards;
         }
 
-        .r1 { animation-delay: 0.5s; }
-        .r2 { animation-delay: 2s; }
-        .r3 { animation-delay: 3.5s; }
-        .r4 { animation-delay: 5s; }
+        .scene.visible .reveal {
+          animation: fadeUp 1s forwards;
+        }
+
+        .scene.visible .r1 { animation-delay: 0.3s; }
+        .scene.visible .r2 { animation-delay: 1.5s; }
+        .scene.visible .r3 { animation-delay: 2.7s; }
+        .scene.visible .r4 { animation-delay: 3.9s; }
 
         @keyframes fadeUp {
           to {
