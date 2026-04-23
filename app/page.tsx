@@ -22,7 +22,25 @@ export default function Home() {
     scroll();
   }, [started]);
 
-  // START EXPERIENCE (SAFE AUDIO PLAY)
+  // 🎬 TRIGGER SCENES (KEY FIX)
+  useEffect(() => {
+    const scenes = document.querySelectorAll('.scene');
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      },
+      { threshold: 0.5 }
+    );
+
+    scenes.forEach(scene => observer.observe(scene));
+    return () => observer.disconnect();
+  }, []);
+
   const startExperience = async () => {
     setStarted(true);
 
@@ -30,10 +48,9 @@ export default function Home() {
     if (!audio) return;
 
     try {
-      audio.volume = 1;       // 🔊 ensure it's audible
+      audio.volume = 1;
       audio.currentTime = 0;
       await audio.play();
-      console.log("audio started");
     } catch (err) {
       console.log("audio failed", err);
     }
@@ -42,7 +59,6 @@ export default function Home() {
   return (
     <main style={{ fontFamily: 'Georgia, serif', background: '#000', color: '#efe7d6' }}>
 
-      {/* AUDIO */}
       <audio ref={audioRef} src="/ambient.mp3" loop preload="auto" />
 
       {/* START SCREEN */}
@@ -72,55 +88,84 @@ export default function Home() {
         </div>
       )}
 
-      {/* SCENE 1 */}
+      {/* SCENES */}
+
       <Scene img="/eugenics.jpg">
-        <h1 style={title}>WHITEWASHED</h1>
-        <p>She said she was poisoned.</p>
-        <p style={dim}>They said she was mistaken.</p>
-        <p style={fade}>The record was changed.</p>
+        <h1 className="reveal r1 title">WHITEWASHED</h1>
+        <p className="reveal r2">She said she was poisoned.</p>
+        <p className="reveal r3 dim">They said she was mistaken.</p>
+        <p className="reveal r4 fade">The record was changed.</p>
       </Scene>
 
-      {/* SCENE 2 */}
       <Scene img="/newspaper.jpg">
-        <h2>1905</h2>
-        <p>The first report confirmed poisoning.</p>
-        <p style={dim}>The second erased it.</p>
-        <p style={fade}>What happened in between is the story.</p>
+        <h2 className="reveal r1">1905</h2>
+        <p className="reveal r2">The first report confirmed poisoning.</p>
+        <p className="reveal r3 dim">The second erased it.</p>
+        <p className="reveal r4 fade">What happened in between is the story.</p>
       </Scene>
 
-      {/* SCENE 3 */}
       <Scene img="/bertha.jpg">
-        <p style={dim}>She was there.</p>
-        <h2>BERTHA BERNER</h2>
-        <p>Secretary. Witness. Keeper of the story.</p>
+        <p className="reveal r1 dim">She was there.</p>
+        <h2 className="reveal r2">BERTHA BERNER</h2>
+        <p className="reveal r3">Secretary. Witness. Keeper of the story.</p>
       </Scene>
 
-      {/* SCENE 4 */}
       <Scene img="/jordan.jpg" dark>
-        <p style={dim}>At the center of the institution:</p>
-        <h2>DAVID STARR JORDAN</h2>
-        <p>President of Stanford University.</p>
+        <p className="reveal r1 dim">At the center of the institution:</p>
+        <h2 className="reveal r2">DAVID STARR JORDAN</h2>
+        <p className="reveal r3">President of Stanford University.</p>
       </Scene>
 
-      {/* SCENE 5 */}
       <Scene img="/stanford.jpg">
-        <p>
+        <p className="reveal r1">
           The institution endured.<br />
           The narrative stabilized.<br />
           The record remained.
         </p>
       </Scene>
 
-      {/* FINAL */}
       <section style={{ padding: '120px 20px', textAlign: 'center' }}>
-        <p>The diagnosis changed.</p>
-        <p>The evidence shifted.</p>
-        <p>The story remained.</p>
+        <p className="reveal r1">The diagnosis changed.</p>
+        <p className="reveal r2">The evidence shifted.</p>
+        <p className="reveal r3">The story remained.</p>
 
-        <h2 style={{ marginTop: 40 }}>
+        <h2 className="reveal r4" style={{ marginTop: 40 }}>
           HISTORY ACCEPTED THE REVISION
         </h2>
       </section>
+
+      {/* STYLES */}
+      <style>{`
+        .scene {
+          height: 100vh;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          position: relative;
+          text-align: center;
+        }
+
+        .reveal {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+
+        .scene.visible .reveal {
+          animation: fadeUp 1s forwards;
+        }
+
+        .scene.visible .r1 { animation-delay: 0.3s; }
+        .scene.visible .r2 { animation-delay: 1.5s; }
+        .scene.visible .r3 { animation-delay: 2.7s; }
+        .scene.visible .r4 { animation-delay: 3.9s; }
+
+        @keyframes fadeUp {
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+      `}</style>
 
     </main>
   );
@@ -130,18 +175,11 @@ export default function Home() {
 
 function Scene({ img, children, dark }: any) {
   return (
-    <section style={{
-      height: '100vh',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      position: 'relative',
-      textAlign: 'center'
-    }}>
+    <section className="scene">
       <div style={{
         position: 'absolute',
         inset: 0,
-        backgroundImage: `url(${img})`,
+        backgroundImage: \`url(\${img})\`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         filter: 'grayscale(100%) brightness(0.5)'
