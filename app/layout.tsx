@@ -1,23 +1,36 @@
-import React from "react";
+import Link from 'next/link';
 
-export default function RootLayout({
-
-  children,
-
-}: {
-
-  children: React.ReactNode;
-
-}) {
-
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-
     <html>
+      <body style={{
+        background: '#000',
+        color: '#efe7d6',
+        fontFamily: 'Georgia, serif',
+        margin: 0
+      }}>
 
-      <body>{children}</body>
+        {/* MENU THAT ALWAYS STAYS */}
+        <nav style={{
+          position: 'fixed',
+          top: 20,
+          right: 30,
+          display: 'flex',
+          gap: '20px',
+          fontSize: '12px',
+          letterSpacing: '2px',
+          zIndex: 999
+        }}>
+          <Link href="/">HOME</Link>
+          <Link href="/film">FILM</Link>
+          <Link href="/about">ABOUT</Link>
+          <Link href="/epk">EPK</Link>
+          <Link href="/contact">CONTACT</Link>
+        </nav>
 
+        {children}
+
+      </body>
     </html>
-
   );
-
 }
