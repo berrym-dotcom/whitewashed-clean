@@ -1,11 +1,12 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export default function Home() {
+  const audioRef = useRef<HTMLAudioElement>(null);
   const [started, setStarted] = useState(false);
 
-  // SIMPLE AUTO SCROLL
+  // AUTO SCROLL
   useEffect(() => {
     if (!started) return;
 
@@ -21,8 +22,28 @@ export default function Home() {
     scroll();
   }, [started]);
 
+  // START EXPERIENCE (SAFE AUDIO PLAY)
+  const startExperience = async () => {
+    setStarted(true);
+
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    try {
+      audio.volume = 1;       // 🔊 ensure it's audible
+      audio.currentTime = 0;
+      await audio.play();
+      console.log("audio started");
+    } catch (err) {
+      console.log("audio failed", err);
+    }
+  };
+
   return (
     <main style={{ fontFamily: 'Georgia, serif', background: '#000', color: '#efe7d6' }}>
+
+      {/* AUDIO */}
+      <audio ref={audioRef} src="/ambient.mp3" loop preload="auto" />
 
       {/* START SCREEN */}
       {!started && (
@@ -36,7 +57,7 @@ export default function Home() {
           zIndex: 100
         }}>
           <button
-            onClick={() => setStarted(true)}
+            onClick={startExperience}
             style={{
               border: '1px solid #efe7d6',
               background: 'transparent',
