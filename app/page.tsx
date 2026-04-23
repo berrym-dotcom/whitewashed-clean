@@ -10,7 +10,7 @@ export default function Home() {
   const startExperience = async () => {
     setStarted(true);
 
-    // delay before scroll starts
+    // small pause before scroll begins
     setTimeout(() => {
       setScrolling(true);
     }, 1200);
@@ -35,41 +35,40 @@ export default function Home() {
     scroll();
   }, [scrolling]);
 
+  // 🔴 CRITICAL: If not started, render ONLY black screen
+  if (!started) {
+    return (
+      <main style={startScreen}>
+        <button onClick={startExperience} style={button}>
+          BEGIN EXPERIENCE
+        </button>
+      </main>
+    );
+  }
+
+  // ✅ Only after start do we render the film
   return (
     <main style={{ backgroundColor: '#000', color: '#efe7d6' }}>
 
-      {/* AUDIO */}
       <audio ref={audioRef} src="/ambient.mp3" loop />
 
-      {/* START SCREEN */}
-      {!started && (
-        <div style={startScreen}>
-          <button onClick={startExperience} style={button}>
-            BEGIN EXPERIENCE
-          </button>
+      <section style={scene}>
+        <div style={bg('/jordan.jpg')} />
+        <div style={overlay} />
+
+        <div style={content}>
+          <p style={line}>DAVID STARR JORDAN</p>
+          <p style={line}>President of Stanford University</p>
+
+          <p style={lineStrong}>
+            Scientist. Administrator. Ideologue.
+          </p>
+
+          <p style={lineDim}>
+            And a man who shaped the official record
+          </p>
         </div>
-      )}
-
-      {/* ONLY SHOW FILM AFTER START */}
-      {started && (
-        <section style={scene}>
-          <div style={bg('/jordan.jpg')} />
-          <div style={overlay} />
-
-          <div style={content}>
-            <p style={line}>DAVID STARR JORDAN</p>
-            <p style={line}>President of Stanford University</p>
-
-            <p style={lineStrong}>
-              Scientist. Administrator. Ideologue.
-            </p>
-
-            <p style={lineDim}>
-              And a man who shaped the official record
-            </p>
-          </div>
-        </section>
-      )}
+      </section>
 
     </main>
   );
@@ -83,8 +82,7 @@ const startScreen = {
   backgroundColor: '#000',
   display: 'flex',
   alignItems: 'center',
-  justifyContent: 'center',
-  zIndex: 100
+  justifyContent: 'center'
 } as any;
 
 const button = {
