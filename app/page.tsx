@@ -43,7 +43,7 @@ export default function Home() {
     return () => observer.disconnect();
   }, []);
 
-  // SHOW MENU WHEN SCROLL ENDS (RELIABLE)
+  // SHOW MENU AT END
   useEffect(() => {
     if (!started) return;
 
@@ -63,11 +63,8 @@ export default function Home() {
   const startExperience = async () => {
     setStarted(true);
 
-    const audio = audioRef.current;
-    if (!audio) return;
-
     try {
-      await audio.play();
+      await audioRef.current?.play();
     } catch {}
   };
 
@@ -183,29 +180,33 @@ export default function Home() {
   );
 }
 
-/* SCENE */
+/* SCENE COMPONENT */
 function Scene({ img, children }: any) {
   return (
     <section className="scene">
-      <div style={{
-        position: 'absolute',
-        inset: 0,
-        backgroundImage: `url(${img})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        filter: 'grayscale(100%) brightness(0.5)'
-      }} />
-      <div style={{
-        position: 'absolute',
-        inset: 0,
-        background: 'rgba(0,0,0,0.55)'
-      }} />
+      <div
+        style={{
+          position: 'absolute',
+          inset: 0,
+          backgroundImage: `url(${img})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          filter: 'grayscale(100%) brightness(0.5)',
+        } as any}
+      />
+      <div
+        style={{
+          position: 'absolute',
+          inset: 0,
+          background: 'rgba(0,0,0,0.55)',
+        } as any}
+      />
       <div className="content">{children}</div>
     </section>
   );
 }
 
-/* STYLES */
+/* STYLE OBJECTS (FIXED) */
 const startScreen = {
   position: 'fixed',
   inset: 0,
@@ -213,8 +214,8 @@ const startScreen = {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  zIndex: 100
-};
+  zIndex: 100,
+} as any;
 
 const button = {
   border: '1px solid #efe7d6',
@@ -222,8 +223,8 @@ const button = {
   color: '#efe7d6',
   padding: '16px 32px',
   letterSpacing: '3px',
-  cursor: 'pointer'
-};
+  cursor: 'pointer',
+} as any;
 
 const menu = {
   position: 'fixed',
@@ -233,19 +234,19 @@ const menu = {
   flexDirection: 'column',
   alignItems: 'center',
   justifyContent: 'center',
-  zIndex: 200
-};
+  zIndex: 200,
+} as any;
 
 const menuTitle = {
   fontSize: '28px',
   letterSpacing: '4px',
-  marginBottom: 40
-};
+  marginBottom: 40,
+} as any;
 
 const menuLinks = {
   display: 'flex',
   gap: '40px',
   fontSize: '12px',
   letterSpacing: '3px',
-  opacity: 0.75
-};
+  opacity: 0.75,
+} as any;
