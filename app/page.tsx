@@ -11,7 +11,7 @@ export default function Home() {
   // 🎬 AUTO SCROLL
   useEffect(() => {
     let scrollY = 0;
-    let speed = 0.3; // adjust pacing here
+    let speed = 0.25;
 
     const autoScroll = () => {
       scrollY += speed;
@@ -47,11 +47,11 @@ export default function Home() {
         <div className="overlay" />
 
         <div className="content">
-          <h1 className="title">WHITEWASHED</h1>
+          <h1 className="title reveal r1">WHITEWASHED</h1>
 
-          <p>She said she was poisoned.</p>
-          <p className="dim">They said she was mistaken.</p>
-          <p className="fade">The record was changed.</p>
+          <p className="reveal r2">She said she was poisoned.</p>
+          <p className="reveal r3 dim">They said she was mistaken.</p>
+          <p className="reveal r4 fade">The record was changed.</p>
         </div>
       </Scene>
 
@@ -61,10 +61,10 @@ export default function Home() {
         <div className="overlay" />
 
         <div className="content">
-          <h2>1905</h2>
-          <p>The first report confirmed poisoning.</p>
-          <p className="dim">The second erased it.</p>
-          <p className="fade">What happened in between is the story.</p>
+          <h2 className="reveal r1">1905</h2>
+          <p className="reveal r2">The first report confirmed poisoning.</p>
+          <p className="reveal r3 dim">The second erased it.</p>
+          <p className="reveal r4 fade">What happened in between is the story.</p>
         </div>
       </Scene>
 
@@ -74,9 +74,9 @@ export default function Home() {
         <div className="overlay" />
 
         <div className="content">
-          <p className="dim">She was there.</p>
-          <h2>BERTHA BERNER</h2>
-          <p>Secretary. Witness. Keeper of the story.</p>
+          <p className="reveal r1 dim">She was there.</p>
+          <h2 className="reveal r2">BERTHA BERNER</h2>
+          <p className="reveal r3">Secretary. Witness. Keeper of the story.</p>
         </div>
       </Scene>
 
@@ -86,9 +86,9 @@ export default function Home() {
         <div className="overlay dark" />
 
         <div className="content">
-          <p className="dim">At the center of the institution:</p>
-          <h2>DAVID STARR JORDAN</h2>
-          <p>President of Stanford University.</p>
+          <p className="reveal r1 dim">At the center of the institution:</p>
+          <h2 className="reveal r2">DAVID STARR JORDAN</h2>
+          <p className="reveal r3">President of Stanford University.</p>
         </div>
       </Scene>
 
@@ -98,7 +98,7 @@ export default function Home() {
         <div className="overlay" />
 
         <div className="content">
-          <p>
+          <p className="reveal r1">
             The institution endured.<br />
             The narrative stabilized.<br />
             The record remained.
@@ -109,11 +109,11 @@ export default function Home() {
       {/* FINAL */}
       <Scene>
         <div className="content">
-          <p>The diagnosis changed.</p>
-          <p>The evidence shifted.</p>
-          <p>The story remained.</p>
+          <p className="reveal r1">The diagnosis changed.</p>
+          <p className="reveal r2">The evidence shifted.</p>
+          <p className="reveal r3">The story remained.</p>
 
-          <h2 className="final">
+          <h2 className="reveal r4 final">
             HISTORY ACCEPTED THE REVISION
           </h2>
         </div>
@@ -121,10 +121,6 @@ export default function Home() {
 
       {/* ================= STYLES ================= */}
       <style>{`
-
-        html {
-          scroll-behavior: smooth;
-        }
 
         .scene {
           position: relative;
@@ -162,12 +158,11 @@ export default function Home() {
           padding: 20px;
         }
 
-        /* 🎬 FIXED TITLE KERNING */
         .title {
           font-size: 72px;
           letter-spacing: 3px;
           margin-bottom: 30px;
-          transform: scaleX(0.96); /* subtle tightening */
+          transform: scaleX(0.96);
         }
 
         h2 {
@@ -188,6 +183,25 @@ export default function Home() {
           margin-top: 40px;
           letter-spacing: 2px;
           opacity: 0.8;
+        }
+
+        /* 🎬 TEXT TIMING */
+        .reveal {
+          opacity: 0;
+          transform: translateY(20px);
+          animation: fadeUp 1.2s forwards;
+        }
+
+        .r1 { animation-delay: 0.5s; }
+        .r2 { animation-delay: 2s; }
+        .r3 { animation-delay: 3.5s; }
+        .r4 { animation-delay: 5s; }
+
+        @keyframes fadeUp {
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
         }
 
       `}</style>
