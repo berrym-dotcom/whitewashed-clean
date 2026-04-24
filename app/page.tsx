@@ -14,23 +14,27 @@ export default function Home() {
     } catch {}
   };
 
-  // 🎬 CONTROLLED AUTO SCROLL (stops on interaction → menu works)
+  // 🎬 AUTO SCROLL (FIXED START TIMING)
   useEffect(() => {
     if (!started) return;
 
-    let scrollY = window.scrollY;
     let running = true;
+    let scrollY = window.scrollY;
 
-    const speed = 0.45;
+    const speed = 0.5;
 
-    const scroll = () => {
-      if (!running) return;
-      scrollY += speed;
-      window.scrollTo(0, scrollY);
-      requestAnimationFrame(scroll);
+    const startScroll = () => {
+      const scroll = () => {
+        if (!running) return;
+        scrollY += speed;
+        window.scrollTo(0, scrollY);
+        requestAnimationFrame(scroll);
+      };
+      scroll();
     };
 
-    scroll();
+    // 🔥 delay ensures overlay is gone before scroll begins
+    const timeout = setTimeout(startScroll, 800);
 
     const stop = () => (running = false);
 
@@ -40,6 +44,7 @@ export default function Home() {
 
     return () => {
       running = false;
+      clearTimeout(timeout);
       window.removeEventListener('wheel', stop);
       window.removeEventListener('touchstart', stop);
       window.removeEventListener('mousedown', stop);
