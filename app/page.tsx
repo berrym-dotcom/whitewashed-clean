@@ -6,6 +6,28 @@ import type { CSSProperties } from 'react';
 export default function Home() {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [started, setStarted] = useState(false);
+  const [index, setIndex] = useState(0);
+
+  const scenes = [
+    { img: '/eugenics.jpg', text: 'EUGENICS.' },
+    { img: '/eugenics.jpg', text: '1905.' },
+    { img: '/eugenics.jpg', text: 'A murder.' },
+    { img: '/newspaper.jpg', text: 'The story changed.' },
+    {
+      img: '/bertha.jpg',
+      text: 'Jane Stanford’s personal assistant, Bertha Berner, was there.',
+    },
+    {
+      img: '/jordan.jpg',
+      lines: [
+        'DAVID STARR JORDAN.',
+        'President of Stanford University.',
+        'Scientist. Ideologue.',
+        'The truth was concealed.',
+      ],
+    },
+    { img: '/stanford.jpg', text: 'The institution endured.' },
+  ];
 
   const startExperience = async () => {
     setStarted(true);
@@ -14,39 +36,40 @@ export default function Home() {
     } catch {}
   };
 
-  // 🎬 FASTER AUTO SCROLL
+  // 🎬 AUTO SCROLL + SCENE ADVANCE
   useEffect(() => {
     if (!started) return;
 
     let running = true;
     let scrollY = window.scrollY;
 
-    const speed = 0.8; // 🔥 faster pacing
+    const speed = 0.8;
 
-    const startScroll = () => {
-      const scroll = () => {
-        if (!running) return;
-        scrollY += speed;
-        window.scrollTo(0, scrollY);
-        requestAnimationFrame(scroll);
-      };
-      scroll();
+    const scroll = () => {
+      if (!running) return;
+      scrollY += speed;
+      window.scrollTo(0, scrollY);
+      requestAnimationFrame(scroll);
     };
 
-    const timeout = setTimeout(startScroll, 500);
+    scroll();
+
+    const interval = setInterval(() => {
+      setIndex((i) => Math.min(i + 1, scenes.length - 1));
+    }, 1400); // pacing between scenes
 
     const stop = () => (running = false);
 
     window.addEventListener('wheel', stop);
-    window.addEventListener('touchstart', stop);
     window.addEventListener('mousedown', stop);
+    window.addEventListener('touchstart', stop);
 
     return () => {
       running = false;
-      clearTimeout(timeout);
+      clearInterval(interval);
       window.removeEventListener('wheel', stop);
-      window.removeEventListener('touchstart', stop);
       window.removeEventListener('mousedown', stop);
+      window.removeEventListener('touchstart', stop);
     };
   }, [started]);
 
@@ -62,109 +85,70 @@ export default function Home() {
         </div>
       )}
 
-      <div style={{ opacity: started ? 1 : 0, transition: 'opacity 1s' }}>
-        <Scene title="WHITEWASHED" />
+      {/* 🎬 CONTINUOUS BACKGROUND */}
+      {started && (
+        <>
+          {scenes.map((scene, i) => (
+            <div
+              key={i}
+              style={{
+                ...bg(scene.img),
+                opacity: i === index ? 1 : 0,
+                transition: 'opacity 1.2s ease',
+              }}
+            />
+          ))}
 
-        <Scene img="/eugenics.jpg" text="EUGENICS." />
-
-        <Scene text="1905." />
-
-        <Scene text="A murder." />
-
-        <Scene img="/newspaper.jpg" text="The story changed." />
-
-        <Scene
-          img="/bertha.jpg"
-          text="Jane Stanford’s personal assistant, Bertha Berner, was there."
-        />
-
-        <Scene img="/jordan.jpg">
-          <p style={line}>DAVID STARR JORDAN.</p>
-          <p style={line}>President of Stanford University.</p>
-          <p style={line}>Scientist. Ideologue.</p>
-          <p style={{ ...line, opacity: 0.6 }}>
-            The truth was concealed.
-          </p>
-        </Scene>
-
-        <Scene img="/stanford.jpg" text="The institution endured." />
-      </div>
+          {/* TEXT LAYER */}
+          <div style={textLayer}>
+            <SceneContent data={scenes[index]} />
+          </div>
+        </>
+      )}
     </main>
   );
 }
 
-/* ---------- SCENE ---------- */
+/* ---------- TEXT ---------- */
 
-function Scene({
-  img,
-  text,
-  title,
-  children,
-}: {
-  img?: string;
-  text?: string;
-  title?: string;
-  children?: React.ReactNode;
-}) {
+function SceneContent({ data }: any) {
   const [step, setStep] = useState(0);
 
   useEffect(() => {
     setStep(0);
-
-    const timings = [200, 450, 700, 950]; // 🔥 faster reveal
+    const timings = [200, 500, 800, 1100];
 
     const timers = timings.map((t, i) =>
       setTimeout(() => setStep(i + 1), t)
     );
 
     return () => timers.forEach(clearTimeout);
-  }, []);
+  }, [data]);
+
+  if (data.lines) {
+    return data.lines.map((line, i) => (
+      <Reveal key={i} show={step >= i + 1}>
+        <p style={lineStyle}>{line}</p>
+      </Reveal>
+    ));
+  }
 
   return (
-    <section style={scene}>
-      {img && <div style={bg(img)} />}
-      <div style={overlay} />
-
-      <div style={content}>
-        {title && (
-          <Reveal show={step >= 1}>
-            <h1 style={titleStyle}>{title}</h1>
-          </Reveal>
-        )}
-
-        {text && (
-          <Reveal show={step >= 1}>
-            <p style={textStyle}>{text}</p>
-          </Reveal>
-        )}
-
-        {Array.isArray(children)
-          ? children.map((child, i) => (
-              <Reveal key={i} show={step >= i + 1}>
-                {child}
-              </Reveal>
-            ))
-          : children}
-      </div>
-    </section>
+    <Reveal show={true}>
+      <p style={textStyle}>{data.text}</p>
+    </Reveal>
   );
 }
 
 /* ---------- REVEAL ---------- */
 
-function Reveal({
-  show,
-  children,
-}: {
-  show: boolean;
-  children: React.ReactNode;
-}) {
+function Reveal({ show, children }: any) {
   return (
     <div
       style={{
         opacity: show ? 1 : 0,
-        transform: show ? 'translateY(0px)' : 'translateY(20px)',
-        transition: 'all 0.5s ease', // 🔥 snappier
+        transform: show ? 'translateY(0)' : 'translateY(20px)',
+        transition: 'all 0.6s ease',
       }}
     >
       {children}
@@ -182,7 +166,7 @@ const main: CSSProperties = {
 const cover: CSSProperties = {
   position: 'fixed',
   inset: 0,
-  backgroundColor: '#000',
+  background: '#000',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
@@ -192,54 +176,39 @@ const cover: CSSProperties = {
 const button: CSSProperties = {
   border: '1px solid #efe7d6',
   padding: '16px 32px',
-  letterSpacing: '3px',
   background: 'transparent',
   color: '#efe7d6',
+  letterSpacing: '3px',
   cursor: 'pointer',
 };
 
-const scene: CSSProperties = {
-  height: '100vh',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  textAlign: 'center',
-  position: 'relative',
-};
-
 const bg = (img: string): CSSProperties => ({
-  position: 'absolute',
+  position: 'fixed',
   inset: 0,
   backgroundImage: `url(${img})`,
   backgroundSize: 'cover',
   backgroundPosition: 'center',
   filter: 'grayscale(100%) brightness(0.5)',
+  zIndex: 0,
 });
 
-const overlay: CSSProperties = {
-  position: 'absolute',
+const textLayer: CSSProperties = {
+  position: 'fixed',
   inset: 0,
-  background: 'rgba(0,0,0,0.6)',
-};
-
-const content: CSSProperties = {
-  position: 'relative',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  textAlign: 'center',
   zIndex: 2,
-  maxWidth: 700,
-};
-
-const titleStyle: CSSProperties = {
-  fontSize: '80px',
-  letterSpacing: '8px',
 };
 
 const textStyle: CSSProperties = {
-  fontSize: '22px',
+  fontSize: '26px',
   letterSpacing: '2px',
 };
 
-const line: CSSProperties = {
+const lineStyle: CSSProperties = {
+  fontSize: '20px',
   margin: '10px 0',
-  fontSize: '18px',
   letterSpacing: '2px',
 };
