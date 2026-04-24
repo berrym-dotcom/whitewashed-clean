@@ -15,8 +15,8 @@ export default function RootLayout({
           <a href="/film" style={navItem}>FILM</a>
           <a href="/about" style={navItem}>ABOUT</a>
 
-          {/* ✅ FIXED EPK */}
-          <a href="/whitewashed-epk.pdf" target="_blank" style={navItem}>
+          {/* ✅ FIXED EPK (same tab) */}
+          <a href="/whitewashed-epk.pdf" style={navItem}>
             EPK
           </a>
 
