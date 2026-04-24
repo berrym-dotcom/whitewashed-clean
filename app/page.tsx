@@ -1,11 +1,42 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { CSSProperties } from 'react';
 
 export default function Home() {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [started, setStarted] = useState(false);
+  const [sceneIndex, setSceneIndex] = useState(0);
+
+  const scenes = [
+    {
+      img: '/eugenics.jpg',
+      lines: ['WHITEWASHED', 'EUGENICS.'],
+    },
+    {
+      img: '/newspaper.jpg',
+      lines: ['1905.', 'A murder.', 'The story changed.'],
+    },
+    {
+      img: '/bertha.jpg',
+      lines: [
+        'Jane Stanford’s personal assistant, Bertha Berner, was there.',
+      ],
+    },
+    {
+      img: '/jordan.jpg',
+      lines: [
+        'DAVID STARR JORDAN.',
+        'President of Stanford University.',
+        'Scientist. Ideologue.',
+        'The truth was concealed.',
+      ],
+    },
+    {
+      img: '/stanford.jpg',
+      lines: ['The institution endured.'],
+    },
+  ];
 
   const startExperience = async () => {
     setStarted(true);
@@ -13,6 +44,48 @@ export default function Home() {
       await audioRef.current?.play();
     } catch {}
   };
+
+  // 🎬 SLOW DRIFT (subtle movement)
+  useEffect(() => {
+    if (!started) return;
+
+    let running = true;
+    let y = window.scrollY;
+
+    const drift = () => {
+      if (!running) return;
+      y += 0.15;
+      window.scrollTo(0, y);
+      requestAnimationFrame(drift);
+    };
+
+    drift();
+
+    return () => {
+      running = false;
+    };
+  }, [started]);
+
+  // 🎬 EDITORIAL TIMING (scene progression)
+  useEffect(() => {
+    if (!started) return;
+
+    const timings = [3000, 3500, 4000, 4500];
+
+    let i = 0;
+
+    const run = () => {
+      if (i >= timings.length) return;
+
+      setTimeout(() => {
+        i++;
+        setSceneIndex(i);
+        run();
+      }, timings[i]);
+    };
+
+    run();
+  }, [started]);
 
   return (
     <main style={main}>
@@ -27,79 +100,59 @@ export default function Home() {
       )}
 
       {started && (
-        <div>
-          <Section img="/eugenics.jpg">
-            <Title>WHITEWASHED</Title>
-          </Section>
+        <>
+          {/* BACKGROUND CROSSFADE */}
+          {scenes.map((scene, i) => (
+            <div
+              key={i}
+              style={{
+                ...bg(scene.img),
+                opacity: i === sceneIndex ? 1 : 0,
+                transition: 'opacity 2.5s ease',
+              }}
+            />
+          ))}
 
-          <Section img="/eugenics.jpg">
-            <Line>EUGENICS.</Line>
-          </Section>
-
-          <Section img="/eugenics.jpg">
-            <Line>1905.</Line>
-            <Line>A murder.</Line>
-          </Section>
-
-          <Section img="/newspaper.jpg">
-            <Line>The story changed.</Line>
-          </Section>
-
-          <Section img="/bertha.jpg">
-            <Line>
-              Jane Stanford’s personal assistant, Bertha Berner, was there.
-            </Line>
-          </Section>
-
-          <Section img="/jordan.jpg">
-            <Line>DAVID STARR JORDAN.</Line>
-            <Line>President of Stanford University.</Line>
-            <Line>Scientist. Ideologue.</Line>
-            <Line subtle>The truth was concealed.</Line>
-          </Section>
-
-          <Section img="/stanford.jpg">
-            <Line>The institution endured.</Line>
-          </Section>
-        </div>
+          {/* TEXT */}
+          <div style={center}>
+            <SceneText data={scenes[sceneIndex]} />
+          </div>
+        </>
       )}
     </main>
   );
 }
 
-/* ---------- COMPONENTS ---------- */
+/* ---------- TEXT ---------- */
 
-function Section({
-  img,
-  children,
-}: {
-  img: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <section style={section}>
-      <div style={bg(img)} />
-      <div style={overlay} />
-      <div style={content}>{children}</div>
-    </section>
-  );
-}
+function SceneText({ data }: any) {
+  const [step, setStep] = useState(0);
 
-function Title({ children }: any) {
-  return <h1 style={title}>{children}</h1>;
-}
+  useEffect(() => {
+    setStep(0);
 
-function Line({ children, subtle }: any) {
-  return (
-    <p
+    const timings = [500, 1400, 2400, 3600];
+
+    const timers = timings.map((t, i) =>
+      setTimeout(() => setStep(i + 1), t)
+    );
+
+    return () => timers.forEach(clearTimeout);
+  }, [data]);
+
+  return data.lines.map((line, i) => (
+    <div
+      key={i}
       style={{
-        ...line,
-        opacity: subtle ? 0.6 : 1,
+        opacity: step >= i + 1 ? 1 : 0,
+        transform: step >= i + 1 ? 'translateY(0)' : 'translateY(40px)',
+        transition: 'all 1.2s ease',
+        margin: '10px 0',
       }}
     >
-      {children}
-    </p>
-  );
+      <p style={text}>{line}</p>
+    </div>
+  ));
 }
 
 /* ---------- STYLES ---------- */
@@ -125,45 +178,28 @@ const button: CSSProperties = {
   background: 'transparent',
   color: '#efe7d6',
   letterSpacing: '3px',
+  cursor: 'pointer',
 };
 
-const section: CSSProperties = {
-  height: '100vh',
-  position: 'relative',
+const bg = (img: string): CSSProperties => ({
+  position: 'fixed',
+  inset: 0,
+  backgroundImage: `url(${img})`,
+  backgroundSize: 'cover',
+  backgroundPosition: 'center',
+  filter: 'grayscale(100%) brightness(0.35)',
+});
+
+const center: CSSProperties = {
+  position: 'fixed',
+  inset: 0,
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
   textAlign: 'center',
 };
 
-const bg = (img: string): CSSProperties => ({
-  position: 'absolute',
-  inset: 0,
-  backgroundImage: `url(${img})`,
-  backgroundSize: 'cover',
-  backgroundPosition: 'center',
-  filter: 'grayscale(100%) brightness(0.4)',
-});
-
-const overlay: CSSProperties = {
-  position: 'absolute',
-  inset: 0,
-  background: 'rgba(0,0,0,0.4)',
-};
-
-const content: CSSProperties = {
-  position: 'relative',
-  zIndex: 2,
-  maxWidth: 700,
-};
-
-const title: CSSProperties = {
-  fontSize: '90px',
-  letterSpacing: '10px',
-};
-
-const line: CSSProperties = {
-  fontSize: '22px',
-  margin: '10px 0',
+const text: CSSProperties = {
+  fontSize: '24px',
   letterSpacing: '2px',
 };
