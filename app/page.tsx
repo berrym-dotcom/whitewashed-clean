@@ -48,11 +48,9 @@ export default function Home() {
 
   const startExperience = async () => {
     setStarted(true);
-
     try {
       await audioRef.current?.play();
     } catch {}
-
     setTimeout(() => setPhase('film'), 6000);
   };
 
@@ -91,10 +89,8 @@ export default function Home() {
     setFade(true);
 
     const audio = audioRef.current;
-
     if (audio) {
       let volume = audio.volume;
-
       const fadeAudio = setInterval(() => {
         if (volume > 0.01) {
           volume -= 0.01;
@@ -107,9 +103,7 @@ export default function Home() {
       }, 120);
     }
 
-    setTimeout(() => {
-      setPhase('end');
-    }, 4500);
+    setTimeout(() => setPhase('end'), 4500);
   };
 
   return (
@@ -126,41 +120,50 @@ export default function Home() {
 
       {started && (
         <>
+          {/* TITLE */}
           {phase === 'title' && (
             <div style={titleScreen}>
               <h1 style={titleText}>WHITEWASHED</h1>
             </div>
           )}
 
+          {/* FILM */}
           {phase === 'film' && (
             <>
-              {/* 🔥 TRUE CROSSFADE SYSTEM */}
+              {/* CROSSFADE IMAGES */}
               {scenes.map((scene, i) => (
                 <div
                   key={i}
                   style={{
                     ...bg(scene.img),
                     opacity: i === sceneIndex ? 1 : 0,
-                    transition: 'opacity 2s ease-in-out',
-                    zIndex: i === sceneIndex ? 2 : 1,
+                    transition: 'opacity 2.5s ease-in-out',
                   }}
                 />
               ))}
 
+              {/* TEXT — CONTROLLED + CLEAN */}
               <div style={center}>
-                {scenes[sceneIndex].lines
-                  .slice(0, lineIndex + 1)
-                  .map((line, i) => (
-                    <p key={i} style={text}>
-                      {line}
-                    </p>
-                  ))}
+                {scenes[sceneIndex].lines.map((line, i) => (
+                  <p
+                    key={i}
+                    style={{
+                      ...text,
+                      opacity: i <= lineIndex ? 1 : 0,
+                      transition: 'opacity 1.5s ease',
+                    }}
+                  >
+                    {line}
+                  </p>
+                ))}
               </div>
             </>
           )}
 
+          {/* FADE OUT */}
           <div style={{ ...fadeOverlay, opacity: fade ? 1 : 0 }} />
 
+          {/* END MENU */}
           {phase === 'end' && (
             <div style={menu}>
               <a href="/" style={menuItem}>HOME</a>
