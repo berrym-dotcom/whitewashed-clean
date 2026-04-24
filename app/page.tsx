@@ -6,7 +6,8 @@ import type { CSSProperties } from 'react';
 export default function Home() {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [started, setStarted] = useState(false);
-  const [index, setIndex] = useState(0);
+  const [phase, setPhase] = useState<'title' | 'film'>('title');
+  const [sceneIndex, setSceneIndex] = useState(0);
 
   const scenes = [
     { img: '/eugenics.jpg', text: 'EUGENICS.' },
@@ -34,62 +35,54 @@ export default function Home() {
     try {
       await audioRef.current?.play();
     } catch {}
+
+    // 🎬 HOLD TITLE (editorial decision)
+    setTimeout(() => setPhase('film'), 2800);
   };
 
-  // 🎬 SLOWER DRIFT SCROLL (background movement)
+  // 🎬 SLOW DRIFT (NOT DOMINANT)
   useEffect(() => {
-    if (!started) return;
+    if (!started || phase !== 'film') return;
 
     let running = true;
-    let scrollY = window.scrollY;
+    let y = window.scrollY;
 
-    const speed = 0.25; // 🔥 slower, more cinematic
+    const speed = 0.18; // very slow, almost imperceptible
 
-    const scroll = () => {
+    const drift = () => {
       if (!running) return;
-      scrollY += speed;
-      window.scrollTo(0, scrollY);
-      requestAnimationFrame(scroll);
+      y += speed;
+      window.scrollTo(0, y);
+      requestAnimationFrame(drift);
     };
 
-    setTimeout(scroll, 600);
-
-    const stop = () => (running = false);
-
-    window.addEventListener('wheel', stop);
-    window.addEventListener('mousedown', stop);
-    window.addEventListener('touchstart', stop);
+    drift();
 
     return () => {
       running = false;
-      window.removeEventListener('wheel', stop);
-      window.removeEventListener('mousedown', stop);
-      window.removeEventListener('touchstart', stop);
     };
-  }, [started]);
+  }, [started, phase]);
 
-  // 🎬 SCENE CHANGE BASED ON SCROLL POSITION (KEY FIX)
+  // 🎬 EDITORIAL TIMING (SCENE CUTS)
   useEffect(() => {
-    if (!started) return;
+    if (!started || phase !== 'film') return;
 
-    const handleScroll = () => {
-      const y = window.scrollY;
-      const sceneHeight = window.innerHeight;
+    const timings = [1800, 2000, 2000, 2400, 3000, 3600];
 
-      const newIndex = Math.min(
-        Math.floor(y / (sceneHeight * 0.9)),
-        scenes.length - 1
-      );
+    let i = 0;
 
-      setIndex(newIndex);
+    const run = () => {
+      if (i >= timings.length) return;
+
+      setTimeout(() => {
+        i++;
+        setSceneIndex(i);
+        run();
+      }, timings[i]);
     };
 
-    window.addEventListener('scroll', handleScroll);
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, [started]);
+    run();
+  }, [started, phase]);
 
   return (
     <main style={main}>
@@ -105,22 +98,31 @@ export default function Home() {
 
       {started && (
         <>
-          {/* BACKGROUND LAYER */}
+          {/* BACKGROUND CROSSFADE */}
           {scenes.map((scene, i) => (
             <div
               key={i}
               style={{
                 ...bg(scene.img),
-                opacity: i === index ? 1 : 0,
-                transition: 'opacity 1.8s ease', // 🔥 slower crossfade
+                opacity: i === sceneIndex ? 1 : 0,
+                transition: 'opacity 2.5s ease',
               }}
             />
           ))}
 
+          {/* TITLE */}
+          {phase === 'title' && (
+            <div style={centerLayer}>
+              <h1 style={titleStyle}>WHITEWASHED</h1>
+            </div>
+          )}
+
           {/* TEXT */}
-          <div style={textLayer}>
-            <SceneContent data={scenes[index]} />
-          </div>
+          {phase === 'film' && (
+            <div style={centerLayer}>
+              <SceneText data={scenes[sceneIndex]} />
+            </div>
+          )}
         </>
       )}
     </main>
@@ -129,13 +131,13 @@ export default function Home() {
 
 /* ---------- TEXT ---------- */
 
-function SceneContent({ data }: any) {
+function SceneText({ data }: any) {
   const [step, setStep] = useState(0);
 
   useEffect(() => {
     setStep(0);
 
-    const timings = [300, 900, 1500, 2100]; // 🔥 slower reveals
+    const timings = [400, 1100, 1800, 2600];
 
     const timers = timings.map((t, i) =>
       setTimeout(() => setStep(i + 1), t)
@@ -166,8 +168,8 @@ function Reveal({ show, children }: any) {
     <div
       style={{
         opacity: show ? 1 : 0,
-        transform: show ? 'translateY(0)' : 'translateY(30px)',
-        transition: 'all 1s ease',
+        transform: show ? 'translateY(0)' : 'translateY(40px)',
+        transition: 'all 1.2s ease',
       }}
     >
       {children}
@@ -189,7 +191,7 @@ const cover: CSSProperties = {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  zIndex: 9999,
+  zIndex: 10,
 };
 
 const button: CSSProperties = {
@@ -207,16 +209,21 @@ const bg = (img: string): CSSProperties => ({
   backgroundImage: `url(${img})`,
   backgroundSize: 'cover',
   backgroundPosition: 'center',
-  filter: 'grayscale(100%) brightness(0.5)',
+  filter: 'grayscale(100%) brightness(0.35)',
 });
 
-const textLayer: CSSProperties = {
+const centerLayer: CSSProperties = {
   position: 'fixed',
   inset: 0,
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
   textAlign: 'center',
+};
+
+const titleStyle: CSSProperties = {
+  fontSize: '96px',
+  letterSpacing: '12px',
 };
 
 const textStyle: CSSProperties = {
