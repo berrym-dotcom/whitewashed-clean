@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import type { CSSProperties } from 'react';
 
 export default function Home() {
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -8,13 +9,12 @@ export default function Home() {
 
   const startExperience = async () => {
     setStarted(true);
-
     try {
       await audioRef.current?.play();
     } catch {}
   };
 
-  // 🎬 CONTROLLED AUTO-SCROLL (stops on interaction → menu works)
+  // 🎬 CONTROLLED AUTO SCROLL (stops on interaction → menu works)
   useEffect(() => {
     if (!started) return;
 
@@ -50,7 +50,6 @@ export default function Home() {
     <main style={main}>
       <audio ref={audioRef} src="/ambient.mp3" loop />
 
-      {/* START SCREEN */}
       {!started && (
         <div style={cover}>
           <button onClick={startExperience} style={button}>
@@ -59,9 +58,7 @@ export default function Home() {
         </div>
       )}
 
-      {/* FILM */}
       <div style={{ opacity: started ? 1 : 0, transition: 'opacity 1.5s' }}>
-
         <Scene title="WHITEWASHED" />
 
         <Scene img="/eugenics.jpg" text="EUGENICS." />
@@ -87,7 +84,6 @@ export default function Home() {
         </Scene>
 
         <Scene img="/stanford.jpg" text="The institution endured." />
-
       </div>
     </main>
   );
@@ -95,7 +91,17 @@ export default function Home() {
 
 /* ---------- SCENE ---------- */
 
-function Scene({ img, text, title, children }: any) {
+function Scene({
+  img,
+  text,
+  title,
+  children,
+}: {
+  img?: string;
+  text?: string;
+  title?: string;
+  children?: React.ReactNode;
+}) {
   const [step, setStep] = useState(0);
 
   useEffect(() => {
@@ -128,15 +134,13 @@ function Scene({ img, text, title, children }: any) {
           </Reveal>
         )}
 
-        {children &&
-          Array.isArray(children) &&
-          children.map((child, i) => (
-            <Reveal key={i} show={step >= i + 1}>
-              {child}
-            </Reveal>
-          ))}
-
-        {!Array.isArray(children) && children}
+        {Array.isArray(children)
+          ? children.map((child, i) => (
+              <Reveal key={i} show={step >= i + 1}>
+                {child}
+              </Reveal>
+            ))
+          : children}
       </div>
     </section>
   );
@@ -144,7 +148,13 @@ function Scene({ img, text, title, children }: any) {
 
 /* ---------- REVEAL ---------- */
 
-function Reveal({ show, children }: any) {
+function Reveal({
+  show,
+  children,
+}: {
+  show: boolean;
+  children: React.ReactNode;
+}) {
   return (
     <div
       style={{
@@ -160,12 +170,12 @@ function Reveal({ show, children }: any) {
 
 /* ---------- STYLES ---------- */
 
-const main = {
+const main: CSSProperties = {
   backgroundColor: '#000',
   color: '#efe7d6',
 };
 
-const cover = {
+const cover: CSSProperties = {
   position: 'fixed',
   inset: 0,
   backgroundColor: '#000',
@@ -175,7 +185,7 @@ const cover = {
   zIndex: 9999,
 };
 
-const button = {
+const button: CSSProperties = {
   border: '1px solid #efe7d6',
   padding: '16px 32px',
   letterSpacing: '3px',
@@ -184,7 +194,7 @@ const button = {
   cursor: 'pointer',
 };
 
-const scene = {
+const scene: CSSProperties = {
   height: '110vh',
   display: 'flex',
   alignItems: 'center',
@@ -193,7 +203,7 @@ const scene = {
   position: 'relative',
 };
 
-const bg = (img: string) => ({
+const bg = (img: string): CSSProperties => ({
   position: 'absolute',
   inset: 0,
   backgroundImage: `url(${img})`,
@@ -202,29 +212,29 @@ const bg = (img: string) => ({
   filter: 'grayscale(100%) brightness(0.5)',
 });
 
-const overlay = {
+const overlay: CSSProperties = {
   position: 'absolute',
   inset: 0,
   background: 'rgba(0,0,0,0.65)',
 };
 
-const content = {
+const content: CSSProperties = {
   position: 'relative',
   zIndex: 2,
   maxWidth: 700,
 };
 
-const titleStyle = {
+const titleStyle: CSSProperties = {
   fontSize: '80px',
   letterSpacing: '8px',
 };
 
-const textStyle = {
+const textStyle: CSSProperties = {
   fontSize: '22px',
   letterSpacing: '2px',
 };
 
-const line = {
+const line: CSSProperties = {
   margin: '10px 0',
   fontSize: '18px',
   letterSpacing: '2px',
