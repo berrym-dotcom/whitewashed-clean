@@ -14,26 +14,10 @@ export default function Home() {
     } catch {}
   };
 
-  // smooth auto scroll
-  useEffect(() => {
-    if (!started) return;
-
-    let scrollY = 0;
-    const speed = 0.35;
-
-    const scroll = () => {
-      scrollY += speed;
-      window.scrollTo(0, scrollY);
-      requestAnimationFrame(scroll);
-    };
-
-    scroll();
-  }, [started]);
-
   return (
-    <main style={{ backgroundColor: '#000', color: '#efe7d6' }}>
+    <main style={main}>
 
-      {/* 🎵 MUSIC */}
+      {/* 🎵 AUDIO */}
       <audio ref={audioRef} src="/ambient.mp3" loop />
 
       {/* 🎬 START SCREEN */}
@@ -46,59 +30,78 @@ export default function Home() {
       )}
 
       {/* 🎞 FILM */}
-      {started && (
-        <>
-          <Scene title="WHITEWASHED" />
+      <div style={{ ...film, opacity: started ? 1 : 0 }}>
 
-          <Scene
-            img="/eugenics.jpg"
-            text="A belief system disguised as science."
-          />
+        <Scene title="WHITEWASHED" />
 
-          <Scene
-            img="/newspaper.jpg"
-            text="The story changed."
-          />
+        <Scene img="/eugenics.jpg" text="EUGENICS." />
 
-          <Scene
-            img="/bertha.jpg"
-            text="Bertha Berner knew the truth."
-          />
+        <Scene text="1905." />
 
-          <Scene
-            img="/jordan.jpg"
-            sub="DAVID STARR JORDAN"
-            text="Scientist. Administrator. Ideologue."
-          />
+        <Scene text="A murder." />
 
-          <Scene
-            img="/stanford.jpg"
-            text="The institution moved forward."
-          />
-        </>
-      )}
+        <Scene img="/newspaper.jpg" text="The story changed." />
+
+        <Scene
+          img="/bertha.jpg"
+          text="Jane Stanford’s personal assistant, Bertha Berner, was there."
+        />
+
+        <Scene img="/jordan.jpg">
+          <p style={line}>DAVID STARR JORDAN.</p>
+          <p style={line}>President of Stanford University.</p>
+          <p style={line}>Scientist. Ideologue.</p>
+          <p style={{ ...line, opacity: 0.6 }}>
+            The truth was concealed.
+          </p>
+        </Scene>
+
+        <Scene img="/stanford.jpg" text="The institution endured." />
+
+      </div>
     </main>
   );
 }
 
 /* ---------- SCENE ---------- */
 
-function Scene({ img, text, title, sub }: any) {
+function Scene({ img, text, title, children }: any) {
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const t = setTimeout(() => setVisible(true), 300);
+    return () => clearTimeout(t);
+  }, []);
+
   return (
     <section style={scene}>
       {img && <div style={bg(img)} />}
       <div style={overlay} />
 
-      <div style={content}>
+      <div style={{
+        ...content,
+        opacity: visible ? 1 : 0,
+        transform: visible ? 'translateY(0px)' : 'translateY(20px)',
+        transition: 'all 1.2s ease'
+      }}>
         {title && <h1 style={titleStyle}>{title}</h1>}
-        {sub && <p style={subStyle}>{sub}</p>}
         {text && <p style={textStyle}>{text}</p>}
+        {children}
       </div>
     </section>
   );
 }
 
 /* ---------- STYLES ---------- */
+
+const main = {
+  backgroundColor: '#000',
+  color: '#efe7d6',
+};
+
+const film = {
+  scrollSnapType: 'y mandatory',
+};
 
 const cover = {
   position: 'fixed',
@@ -107,7 +110,7 @@ const cover = {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  zIndex: 9999 // covers menu until start
+  zIndex: 9999,
 } as any;
 
 const button = {
@@ -116,7 +119,7 @@ const button = {
   letterSpacing: '3px',
   background: 'transparent',
   color: '#efe7d6',
-  cursor: 'pointer'
+  cursor: 'pointer',
 } as any;
 
 const scene = {
@@ -125,7 +128,8 @@ const scene = {
   alignItems: 'center',
   justifyContent: 'center',
   textAlign: 'center',
-  position: 'relative'
+  position: 'relative',
+  scrollSnapAlign: 'start',
 } as any;
 
 const bg = (img: string) => ({
@@ -134,33 +138,33 @@ const bg = (img: string) => ({
   backgroundImage: `url(${img})`,
   backgroundSize: 'cover',
   backgroundPosition: 'center',
-  filter: 'grayscale(100%) brightness(0.55)'
+  filter: 'grayscale(100%) brightness(0.5)',
 } as any);
 
 const overlay = {
   position: 'absolute',
   inset: 0,
-  background: 'rgba(0,0,0,0.6)'
+  background: 'rgba(0,0,0,0.65)',
 } as any;
 
 const content = {
   position: 'relative',
   zIndex: 2,
-  maxWidth: 700
+  maxWidth: 700,
 } as any;
 
 const titleStyle = {
-  fontSize: '64px',
-  letterSpacing: '6px'
-} as any;
-
-const subStyle = {
-  marginTop: '10px',
-  fontSize: '14px',
-  opacity: 0.7
+  fontSize: '80px',
+  letterSpacing: '8px',
 } as any;
 
 const textStyle = {
-  marginTop: '20px',
-  fontSize: '18px'
+  fontSize: '22px',
+  letterSpacing: '2px',
+} as any;
+
+const line = {
+  margin: '10px 0',
+  fontSize: '18px',
+  letterSpacing: '2px',
 } as any;
