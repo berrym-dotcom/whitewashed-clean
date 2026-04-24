@@ -54,11 +54,9 @@ export default function Home() {
       await audioRef.current?.play();
     } catch {}
 
-    // Title hold
     setTimeout(() => setPhase('film'), 6000);
   };
 
-  // 🎬 FILM TIMELINE
   useEffect(() => {
     if (!started || phase !== 'film') return;
 
@@ -90,33 +88,34 @@ export default function Home() {
     run();
   }, [started, phase]);
 
-  // 🎬 END SEQUENCE
   const triggerEnd = () => {
     setFade(true);
 
     const audio = audioRef.current;
-    if (audio) {
-      let vol = audio.volume;
 
-      const fadeAudio = setInterval(() => {
-        if (vol > 0.02) {
-          vol -= 0.02;
-          audio.volume = vol;
+    if (audio) {
+      let volume = audio.volume;
+
+      const fade = setInterval(() => {
+        if (volume > 0.01) {
+          volume -= 0.01;
+          audio.volume = volume;
         } else {
           audio.volume = 0;
-          clearInterval(fadeAudio);
+          audio.pause();
+          clearInterval(fade);
         }
-      }, 100);
+      }, 120);
     }
 
     setTimeout(() => {
       setPhase('end');
-    }, 2500);
+    }, 4500);
   };
 
   return (
     <main style={main}>
-      <audio ref={audioRef} src="/ambient.mp3" loop />
+      <audio ref={audioRef} src="/ambient.mp3" />
 
       {!started && (
         <div style={cover}>
@@ -128,14 +127,12 @@ export default function Home() {
 
       {started && (
         <>
-          {/* TITLE */}
           {phase === 'title' && (
             <div style={titleScreen}>
               <h1 style={titleText}>WHITEWASHED</h1>
             </div>
           )}
 
-          {/* FILM */}
           {phase === 'film' && (
             <>
               <div style={bg(scenes[sceneIndex].img)} />
@@ -152,7 +149,6 @@ export default function Home() {
             </>
           )}
 
-          {/* FADE TO BLACK */}
           <div
             style={{
               ...fadeOverlay,
@@ -160,14 +156,11 @@ export default function Home() {
             }}
           />
 
-          {/* FINAL MENU */}
           {phase === 'end' && (
             <div style={menu}>
               <a href="/film" style={menuItem}>FILM</a>
               <a href="/about" style={menuItem}>ABOUT</a>
               <a href="/contact" style={menuItem}>CONTACT</a>
-
-              {/* ✅ WORKING EPK */}
               <a href="/whitewashed-epk.pdf" target="_blank" style={menuItem}>
                 EPK
               </a>
