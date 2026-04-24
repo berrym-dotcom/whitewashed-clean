@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import type { CSSProperties } from 'react';
 
 export default function Home() {
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -114,7 +113,7 @@ export default function Home() {
   };
 
   return (
-    <main style={main}>
+    <main style={{ background: '#000', color: '#efe7d6' }}>
       <audio ref={audioRef} src="/ambient.mp3" />
 
       {!started && (
@@ -149,21 +148,15 @@ export default function Home() {
             </>
           )}
 
-          <div
-            style={{
-              ...fadeOverlay,
-              opacity: fade ? 1 : 0,
-            }}
-          />
+          <div style={{ ...fadeOverlay, opacity: fade ? 1 : 0 }} />
 
           {phase === 'end' && (
             <div style={menu}>
+              <a href="/" style={menuItem}>HOME</a>
               <a href="/film" style={menuItem}>FILM</a>
               <a href="/about" style={menuItem}>ABOUT</a>
               <a href="/contact" style={menuItem}>CONTACT</a>
-              <a href="/whitewashed-epk.pdf" target="_blank" style={menuItem}>
-                EPK
-              </a>
+              <a href="/whitewashed-epk.pdf" style={menuItem}>EPK</a>
             </div>
           )}
         </>
@@ -172,15 +165,10 @@ export default function Home() {
   );
 }
 
-/* ---------- STYLES ---------- */
+/* STYLES */
 
-const main: CSSProperties = {
-  background: '#000',
-  color: '#efe7d6',
-};
-
-const cover: CSSProperties = {
-  position: 'fixed',
+const cover = {
+  position: 'fixed' as const,
   inset: 0,
   background: '#000',
   display: 'flex',
@@ -188,17 +176,16 @@ const cover: CSSProperties = {
   justifyContent: 'center',
 };
 
-const button: CSSProperties = {
+const button = {
   border: '1px solid #efe7d6',
   padding: '16px 32px',
   background: 'transparent',
   color: '#efe7d6',
-  letterSpacing: '3px',
   cursor: 'pointer',
 };
 
-const titleScreen: CSSProperties = {
-  position: 'fixed',
+const titleScreen = {
+  position: 'fixed' as const,
   inset: 0,
   background: '#000',
   display: 'flex',
@@ -206,13 +193,13 @@ const titleScreen: CSSProperties = {
   justifyContent: 'center',
 };
 
-const titleText: CSSProperties = {
-  fontSize: '110px',
-  letterSpacing: '14px',
+const titleText = {
+  fontSize: '100px',
+  letterSpacing: '12px',
 };
 
-const bg = (img: string): CSSProperties => ({
-  position: 'fixed',
+const bg = (img: string) => ({
+  position: 'fixed' as const,
   inset: 0,
   backgroundImage: `url(${img})`,
   backgroundSize: 'cover',
@@ -220,41 +207,39 @@ const bg = (img: string): CSSProperties => ({
   filter: 'grayscale(100%) brightness(0.4)',
 });
 
-const center: CSSProperties = {
-  position: 'fixed',
+const center = {
+  position: 'fixed' as const,
   inset: 0,
   display: 'flex',
-  flexDirection: 'column',
+  flexDirection: 'column' as const,
   alignItems: 'center',
   justifyContent: 'center',
 };
 
-const text: CSSProperties = {
+const text = {
   fontSize: '26px',
   margin: '8px 0',
 };
 
-const fadeOverlay: CSSProperties = {
-  position: 'fixed',
+const fadeOverlay = {
+  position: 'fixed' as const,
   inset: 0,
   background: '#000',
   transition: 'opacity 2.5s ease',
-  pointerEvents: 'none',
 };
 
-const menu: CSSProperties = {
-  position: 'fixed',
+const menu = {
+  position: 'fixed' as const,
   inset: 0,
   display: 'flex',
-  flexDirection: 'column',
+  flexDirection: 'column' as const,
   alignItems: 'center',
   justifyContent: 'center',
   gap: '20px',
 };
 
-const menuItem: CSSProperties = {
+const menuItem = {
   color: '#ffe600',
   fontSize: '22px',
-  letterSpacing: '3px',
   textDecoration: 'none',
 };
