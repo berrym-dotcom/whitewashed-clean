@@ -5,10 +5,12 @@ import type { CSSProperties } from 'react';
 
 export default function Home() {
   const audioRef = useRef<HTMLAudioElement>(null);
+
   const [started, setStarted] = useState(false);
-  const [phase, setPhase] = useState<'title' | 'film'>('title');
+  const [phase, setPhase] = useState<'title' | 'film' | 'end'>('title');
   const [sceneIndex, setSceneIndex] = useState(0);
   const [lineIndex, setLineIndex] = useState(0);
+  const [fade, setFade] = useState(false);
 
   const scenes = [
     {
@@ -47,17 +49,16 @@ export default function Home() {
 
   const startExperience = async () => {
     setStarted(true);
+
     try {
       await audioRef.current?.play();
     } catch {}
 
-    // Title duration
-    setTimeout(() => {
-      setPhase('film');
-    }, 6000);
+    // Title hold
+    setTimeout(() => setPhase('film'), 6000);
   };
 
-  // 🎬 LINE + SCENE TIMING (editorial control)
+  // 🎬 FILM TIMELINE
   useEffect(() => {
     if (!started || phase !== 'film') return;
 
@@ -77,6 +78,9 @@ export default function Home() {
           if (scene < scenes.length - 1) {
             scene++;
             line = 0;
+          } else {
+            triggerEnd();
+            return;
           }
         }
         run();
@@ -85,6 +89,30 @@ export default function Home() {
 
     run();
   }, [started, phase]);
+
+  // 🎬 END SEQUENCE
+  const triggerEnd = () => {
+    setFade(true);
+
+    const audio = audioRef.current;
+    if (audio) {
+      let vol = audio.volume;
+
+      const fadeAudio = setInterval(() => {
+        if (vol > 0.02) {
+          vol -= 0.02;
+          audio.volume = vol;
+        } else {
+          audio.volume = 0;
+          clearInterval(fadeAudio);
+        }
+      }, 100);
+    }
+
+    setTimeout(() => {
+      setPhase('end');
+    }, 2500);
+  };
 
   return (
     <main style={main}>
@@ -100,14 +128,14 @@ export default function Home() {
 
       {started && (
         <>
-          {/* 🎬 TITLE */}
+          {/* TITLE */}
           {phase === 'title' && (
             <div style={titleScreen}>
               <h1 style={titleText}>WHITEWASHED</h1>
             </div>
           )}
 
-          {/* 🎬 FILM */}
+          {/* FILM */}
           {phase === 'film' && (
             <>
               <div style={bg(scenes[sceneIndex].img)} />
@@ -122,6 +150,28 @@ export default function Home() {
                   ))}
               </div>
             </>
+          )}
+
+          {/* FADE TO BLACK */}
+          <div
+            style={{
+              ...fadeOverlay,
+              opacity: fade ? 1 : 0,
+            }}
+          />
+
+          {/* FINAL MENU */}
+          {phase === 'end' && (
+            <div style={menu}>
+              <a href="/film" style={menuItem}>FILM</a>
+              <a href="/about" style={menuItem}>ABOUT</a>
+              <a href="/contact" style={menuItem}>CONTACT</a>
+
+              {/* ✅ WORKING EPK */}
+              <a href="/whitewashed-epk.pdf" target="_blank" style={menuItem}>
+                EPK
+              </a>
+            </div>
           )}
         </>
       )}
@@ -143,7 +193,6 @@ const cover: CSSProperties = {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  zIndex: 10,
 };
 
 const button: CSSProperties = {
@@ -167,7 +216,6 @@ const titleScreen: CSSProperties = {
 const titleText: CSSProperties = {
   fontSize: '110px',
   letterSpacing: '14px',
-  fontWeight: 300,
 };
 
 const bg = (img: string): CSSProperties => ({
@@ -186,11 +234,34 @@ const center: CSSProperties = {
   flexDirection: 'column',
   alignItems: 'center',
   justifyContent: 'center',
-  textAlign: 'center',
 };
 
 const text: CSSProperties = {
   fontSize: '26px',
-  letterSpacing: '2px',
   margin: '8px 0',
+};
+
+const fadeOverlay: CSSProperties = {
+  position: 'fixed',
+  inset: 0,
+  background: '#000',
+  transition: 'opacity 2.5s ease',
+  pointerEvents: 'none',
+};
+
+const menu: CSSProperties = {
+  position: 'fixed',
+  inset: 0,
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  justifyContent: 'center',
+  gap: '20px',
+};
+
+const menuItem: CSSProperties = {
+  color: '#ffe600',
+  fontSize: '22px',
+  letterSpacing: '3px',
+  textDecoration: 'none',
 };
