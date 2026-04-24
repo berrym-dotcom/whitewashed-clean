@@ -36,14 +36,14 @@ export default function Home() {
     } catch {}
   };
 
-  // 🎬 AUTO SCROLL + SCENE ADVANCE
+  // 🎬 SLOWER DRIFT SCROLL (background movement)
   useEffect(() => {
     if (!started) return;
 
     let running = true;
     let scrollY = window.scrollY;
 
-    const speed = 0.8;
+    const speed = 0.25; // 🔥 slower, more cinematic
 
     const scroll = () => {
       if (!running) return;
@@ -52,11 +52,7 @@ export default function Home() {
       requestAnimationFrame(scroll);
     };
 
-    scroll();
-
-    const interval = setInterval(() => {
-      setIndex((i) => Math.min(i + 1, scenes.length - 1));
-    }, 1400); // pacing between scenes
+    setTimeout(scroll, 600);
 
     const stop = () => (running = false);
 
@@ -66,10 +62,32 @@ export default function Home() {
 
     return () => {
       running = false;
-      clearInterval(interval);
       window.removeEventListener('wheel', stop);
       window.removeEventListener('mousedown', stop);
       window.removeEventListener('touchstart', stop);
+    };
+  }, [started]);
+
+  // 🎬 SCENE CHANGE BASED ON SCROLL POSITION (KEY FIX)
+  useEffect(() => {
+    if (!started) return;
+
+    const handleScroll = () => {
+      const y = window.scrollY;
+      const sceneHeight = window.innerHeight;
+
+      const newIndex = Math.min(
+        Math.floor(y / (sceneHeight * 0.9)),
+        scenes.length - 1
+      );
+
+      setIndex(newIndex);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
     };
   }, [started]);
 
@@ -85,21 +103,21 @@ export default function Home() {
         </div>
       )}
 
-      {/* 🎬 CONTINUOUS BACKGROUND */}
       {started && (
         <>
+          {/* BACKGROUND LAYER */}
           {scenes.map((scene, i) => (
             <div
               key={i}
               style={{
                 ...bg(scene.img),
                 opacity: i === index ? 1 : 0,
-                transition: 'opacity 1.2s ease',
+                transition: 'opacity 1.8s ease', // 🔥 slower crossfade
               }}
             />
           ))}
 
-          {/* TEXT LAYER */}
+          {/* TEXT */}
           <div style={textLayer}>
             <SceneContent data={scenes[index]} />
           </div>
@@ -116,7 +134,8 @@ function SceneContent({ data }: any) {
 
   useEffect(() => {
     setStep(0);
-    const timings = [200, 500, 800, 1100];
+
+    const timings = [300, 900, 1500, 2100]; // 🔥 slower reveals
 
     const timers = timings.map((t, i) =>
       setTimeout(() => setStep(i + 1), t)
@@ -147,8 +166,8 @@ function Reveal({ show, children }: any) {
     <div
       style={{
         opacity: show ? 1 : 0,
-        transform: show ? 'translateY(0)' : 'translateY(20px)',
-        transition: 'all 0.6s ease',
+        transform: show ? 'translateY(0)' : 'translateY(30px)',
+        transition: 'all 1s ease',
       }}
     >
       {children}
@@ -189,7 +208,6 @@ const bg = (img: string): CSSProperties => ({
   backgroundSize: 'cover',
   backgroundPosition: 'center',
   filter: 'grayscale(100%) brightness(0.5)',
-  zIndex: 0,
 });
 
 const textLayer: CSSProperties = {
@@ -199,7 +217,6 @@ const textLayer: CSSProperties = {
   alignItems: 'center',
   justifyContent: 'center',
   textAlign: 'center',
-  zIndex: 2,
 };
 
 const textStyle: CSSProperties = {
