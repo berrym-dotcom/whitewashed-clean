@@ -1,88 +1,18 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import type { CSSProperties } from 'react';
 
 export default function Home() {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [started, setStarted] = useState(false);
-  const [phase, setPhase] = useState<'title' | 'film'>('title');
-  const [sceneIndex, setSceneIndex] = useState(0);
-
-  const scenes = [
-    { img: '/eugenics.jpg', text: 'EUGENICS.' },
-    { img: '/eugenics.jpg', text: '1905.' },
-    { img: '/eugenics.jpg', text: 'A murder.' },
-    { img: '/newspaper.jpg', text: 'The story changed.' },
-    {
-      img: '/bertha.jpg',
-      text: 'Jane Stanford’s personal assistant, Bertha Berner, was there.',
-    },
-    {
-      img: '/jordan.jpg',
-      lines: [
-        'DAVID STARR JORDAN.',
-        'President of Stanford University.',
-        'Scientist. Ideologue.',
-        'The truth was concealed.',
-      ],
-    },
-    { img: '/stanford.jpg', text: 'The institution endured.' },
-  ];
 
   const startExperience = async () => {
     setStarted(true);
     try {
       await audioRef.current?.play();
     } catch {}
-
-    // 🎬 HOLD TITLE (editorial decision)
-    setTimeout(() => setPhase('film'), 2800);
   };
-
-  // 🎬 SLOW DRIFT (NOT DOMINANT)
-  useEffect(() => {
-    if (!started || phase !== 'film') return;
-
-    let running = true;
-    let y = window.scrollY;
-
-    const speed = 0.18; // very slow, almost imperceptible
-
-    const drift = () => {
-      if (!running) return;
-      y += speed;
-      window.scrollTo(0, y);
-      requestAnimationFrame(drift);
-    };
-
-    drift();
-
-    return () => {
-      running = false;
-    };
-  }, [started, phase]);
-
-  // 🎬 EDITORIAL TIMING (SCENE CUTS)
-  useEffect(() => {
-    if (!started || phase !== 'film') return;
-
-    const timings = [1800, 2000, 2000, 2400, 3000, 3600];
-
-    let i = 0;
-
-    const run = () => {
-      if (i >= timings.length) return;
-
-      setTimeout(() => {
-        i++;
-        setSceneIndex(i);
-        run();
-      }, timings[i]);
-    };
-
-    run();
-  }, [started, phase]);
 
   return (
     <main style={main}>
@@ -97,90 +27,85 @@ export default function Home() {
       )}
 
       {started && (
-        <>
-          {/* BACKGROUND CROSSFADE */}
-          {scenes.map((scene, i) => (
-            <div
-              key={i}
-              style={{
-                ...bg(scene.img),
-                opacity: i === sceneIndex ? 1 : 0,
-                transition: 'opacity 2.5s ease',
-              }}
-            />
-          ))}
+        <div>
+          <Section img="/eugenics.jpg">
+            <Title>WHITEWASHED</Title>
+          </Section>
 
-          {/* TITLE */}
-          {phase === 'title' && (
-            <div style={centerLayer}>
-              <h1 style={titleStyle}>WHITEWASHED</h1>
-            </div>
-          )}
+          <Section img="/eugenics.jpg">
+            <Line>EUGENICS.</Line>
+          </Section>
 
-          {/* TEXT */}
-          {phase === 'film' && (
-            <div style={centerLayer}>
-              <SceneText data={scenes[sceneIndex]} />
-            </div>
-          )}
-        </>
+          <Section img="/eugenics.jpg">
+            <Line>1905.</Line>
+            <Line>A murder.</Line>
+          </Section>
+
+          <Section img="/newspaper.jpg">
+            <Line>The story changed.</Line>
+          </Section>
+
+          <Section img="/bertha.jpg">
+            <Line>
+              Jane Stanford’s personal assistant, Bertha Berner, was there.
+            </Line>
+          </Section>
+
+          <Section img="/jordan.jpg">
+            <Line>DAVID STARR JORDAN.</Line>
+            <Line>President of Stanford University.</Line>
+            <Line>Scientist. Ideologue.</Line>
+            <Line subtle>The truth was concealed.</Line>
+          </Section>
+
+          <Section img="/stanford.jpg">
+            <Line>The institution endured.</Line>
+          </Section>
+        </div>
       )}
     </main>
   );
 }
 
-/* ---------- TEXT ---------- */
+/* ---------- COMPONENTS ---------- */
 
-function SceneText({ data }: any) {
-  const [step, setStep] = useState(0);
-
-  useEffect(() => {
-    setStep(0);
-
-    const timings = [400, 1100, 1800, 2600];
-
-    const timers = timings.map((t, i) =>
-      setTimeout(() => setStep(i + 1), t)
-    );
-
-    return () => timers.forEach(clearTimeout);
-  }, [data]);
-
-  if (data.lines) {
-    return data.lines.map((line, i) => (
-      <Reveal key={i} show={step >= i + 1}>
-        <p style={lineStyle}>{line}</p>
-      </Reveal>
-    ));
-  }
-
+function Section({
+  img,
+  children,
+}: {
+  img: string;
+  children: React.ReactNode;
+}) {
   return (
-    <Reveal show={true}>
-      <p style={textStyle}>{data.text}</p>
-    </Reveal>
+    <section style={section}>
+      <div style={bg(img)} />
+      <div style={overlay} />
+      <div style={content}>{children}</div>
+    </section>
   );
 }
 
-/* ---------- REVEAL ---------- */
+function Title({ children }: any) {
+  return <h1 style={title}>{children}</h1>;
+}
 
-function Reveal({ show, children }: any) {
+function Line({ children, subtle }: any) {
   return (
-    <div
+    <p
       style={{
-        opacity: show ? 1 : 0,
-        transform: show ? 'translateY(0)' : 'translateY(40px)',
-        transition: 'all 1.2s ease',
+        ...line,
+        opacity: subtle ? 0.6 : 1,
       }}
     >
       {children}
-    </div>
+    </p>
   );
 }
 
 /* ---------- STYLES ---------- */
 
 const main: CSSProperties = {
-  backgroundColor: '#000',
+  background: '#000',
   color: '#efe7d6',
 };
 
@@ -200,39 +125,45 @@ const button: CSSProperties = {
   background: 'transparent',
   color: '#efe7d6',
   letterSpacing: '3px',
-  cursor: 'pointer',
 };
 
-const bg = (img: string): CSSProperties => ({
-  position: 'fixed',
-  inset: 0,
-  backgroundImage: `url(${img})`,
-  backgroundSize: 'cover',
-  backgroundPosition: 'center',
-  filter: 'grayscale(100%) brightness(0.35)',
-});
-
-const centerLayer: CSSProperties = {
-  position: 'fixed',
-  inset: 0,
+const section: CSSProperties = {
+  height: '100vh',
+  position: 'relative',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
   textAlign: 'center',
 };
 
-const titleStyle: CSSProperties = {
-  fontSize: '96px',
-  letterSpacing: '12px',
+const bg = (img: string): CSSProperties => ({
+  position: 'absolute',
+  inset: 0,
+  backgroundImage: `url(${img})`,
+  backgroundSize: 'cover',
+  backgroundPosition: 'center',
+  filter: 'grayscale(100%) brightness(0.4)',
+});
+
+const overlay: CSSProperties = {
+  position: 'absolute',
+  inset: 0,
+  background: 'rgba(0,0,0,0.4)',
 };
 
-const textStyle: CSSProperties = {
-  fontSize: '26px',
-  letterSpacing: '2px',
+const content: CSSProperties = {
+  position: 'relative',
+  zIndex: 2,
+  maxWidth: 700,
 };
 
-const lineStyle: CSSProperties = {
-  fontSize: '20px',
+const title: CSSProperties = {
+  fontSize: '90px',
+  letterSpacing: '10px',
+};
+
+const line: CSSProperties = {
+  fontSize: '22px',
   margin: '10px 0',
   letterSpacing: '2px',
 };
