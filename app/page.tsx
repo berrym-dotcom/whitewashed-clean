@@ -6,22 +6,27 @@ import type { CSSProperties } from 'react';
 export default function Home() {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [started, setStarted] = useState(false);
+  const [phase, setPhase] = useState<'title' | 'film'>('title');
   const [sceneIndex, setSceneIndex] = useState(0);
+  const [lineIndex, setLineIndex] = useState(0);
 
   const scenes = [
     {
       img: '/eugenics.jpg',
-      lines: ['WHITEWASHED', 'EUGENICS.'],
+      lines: ['EUGENICS.'],
+      timings: [4000],
     },
     {
       img: '/newspaper.jpg',
       lines: ['1905.', 'A murder.', 'The story changed.'],
+      timings: [2500, 3000, 4000],
     },
     {
       img: '/bertha.jpg',
       lines: [
         'Jane Stanford’s personal assistant, Bertha Berner, was there.',
       ],
+      timings: [5500],
     },
     {
       img: '/jordan.jpg',
@@ -31,10 +36,12 @@ export default function Home() {
         'Scientist. Ideologue.',
         'The truth was concealed.',
       ],
+      timings: [3000, 3000, 4000, 5000],
     },
     {
       img: '/stanford.jpg',
       lines: ['The institution endured.'],
+      timings: [5000],
     },
   ];
 
@@ -43,49 +50,41 @@ export default function Home() {
     try {
       await audioRef.current?.play();
     } catch {}
+
+    // Title duration
+    setTimeout(() => {
+      setPhase('film');
+    }, 6000);
   };
 
-  // 🎬 SLOW DRIFT (subtle movement)
+  // 🎬 LINE + SCENE TIMING (editorial control)
   useEffect(() => {
-    if (!started) return;
+    if (!started || phase !== 'film') return;
 
-    let running = true;
-    let y = window.scrollY;
-
-    const drift = () => {
-      if (!running) return;
-      y += 0.15;
-      window.scrollTo(0, y);
-      requestAnimationFrame(drift);
-    };
-
-    drift();
-
-    return () => {
-      running = false;
-    };
-  }, [started]);
-
-  // 🎬 EDITORIAL TIMING (scene progression)
-  useEffect(() => {
-    if (!started) return;
-
-    const timings = [3000, 3500, 4000, 4500];
-
-    let i = 0;
+    let scene = 0;
+    let line = 0;
 
     const run = () => {
-      if (i >= timings.length) return;
+      setSceneIndex(scene);
+      setLineIndex(line);
+
+      const duration = scenes[scene].timings[line];
 
       setTimeout(() => {
-        i++;
-        setSceneIndex(i);
+        if (line < scenes[scene].lines.length - 1) {
+          line++;
+        } else {
+          if (scene < scenes.length - 1) {
+            scene++;
+            line = 0;
+          }
+        }
         run();
-      }, timings[i]);
+      }, duration);
     };
 
     run();
-  }, [started]);
+  }, [started, phase]);
 
   return (
     <main style={main}>
@@ -101,58 +100,33 @@ export default function Home() {
 
       {started && (
         <>
-          {/* BACKGROUND CROSSFADE */}
-          {scenes.map((scene, i) => (
-            <div
-              key={i}
-              style={{
-                ...bg(scene.img),
-                opacity: i === sceneIndex ? 1 : 0,
-                transition: 'opacity 2.5s ease',
-              }}
-            />
-          ))}
+          {/* 🎬 TITLE */}
+          {phase === 'title' && (
+            <div style={titleScreen}>
+              <h1 style={titleText}>WHITEWASHED</h1>
+            </div>
+          )}
 
-          {/* TEXT */}
-          <div style={center}>
-            <SceneText data={scenes[sceneIndex]} />
-          </div>
+          {/* 🎬 FILM */}
+          {phase === 'film' && (
+            <>
+              <div style={bg(scenes[sceneIndex].img)} />
+
+              <div style={center}>
+                {scenes[sceneIndex].lines
+                  .slice(0, lineIndex + 1)
+                  .map((line, i) => (
+                    <p key={i} style={text}>
+                      {line}
+                    </p>
+                  ))}
+              </div>
+            </>
+          )}
         </>
       )}
     </main>
   );
-}
-
-/* ---------- TEXT ---------- */
-
-function SceneText({ data }: any) {
-  const [step, setStep] = useState(0);
-
-  useEffect(() => {
-    setStep(0);
-
-    const timings = [500, 1400, 2400, 3600];
-
-    const timers = timings.map((t, i) =>
-      setTimeout(() => setStep(i + 1), t)
-    );
-
-    return () => timers.forEach(clearTimeout);
-  }, [data]);
-
-  return data.lines.map((line, i) => (
-    <div
-      key={i}
-      style={{
-        opacity: step >= i + 1 ? 1 : 0,
-        transform: step >= i + 1 ? 'translateY(0)' : 'translateY(40px)',
-        transition: 'all 1.2s ease',
-        margin: '10px 0',
-      }}
-    >
-      <p style={text}>{line}</p>
-    </div>
-  ));
 }
 
 /* ---------- STYLES ---------- */
@@ -181,25 +155,42 @@ const button: CSSProperties = {
   cursor: 'pointer',
 };
 
+const titleScreen: CSSProperties = {
+  position: 'fixed',
+  inset: 0,
+  background: '#000',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+};
+
+const titleText: CSSProperties = {
+  fontSize: '110px',
+  letterSpacing: '14px',
+  fontWeight: 300,
+};
+
 const bg = (img: string): CSSProperties => ({
   position: 'fixed',
   inset: 0,
   backgroundImage: `url(${img})`,
   backgroundSize: 'cover',
   backgroundPosition: 'center',
-  filter: 'grayscale(100%) brightness(0.35)',
+  filter: 'grayscale(100%) brightness(0.4)',
 });
 
 const center: CSSProperties = {
   position: 'fixed',
   inset: 0,
   display: 'flex',
+  flexDirection: 'column',
   alignItems: 'center',
   justifyContent: 'center',
   textAlign: 'center',
 };
 
 const text: CSSProperties = {
-  fontSize: '24px',
+  fontSize: '26px',
   letterSpacing: '2px',
+  margin: '8px 0',
 };
