@@ -95,14 +95,14 @@ export default function Home() {
     if (audio) {
       let volume = audio.volume;
 
-      const fade = setInterval(() => {
+      const fadeAudio = setInterval(() => {
         if (volume > 0.01) {
           volume -= 0.01;
           audio.volume = volume;
         } else {
           audio.volume = 0;
           audio.pause();
-          clearInterval(fade);
+          clearInterval(fadeAudio);
         }
       }, 120);
     }
@@ -134,7 +134,18 @@ export default function Home() {
 
           {phase === 'film' && (
             <>
-              <div style={bg(scenes[sceneIndex].img)} />
+              {/* 🔥 TRUE CROSSFADE SYSTEM */}
+              {scenes.map((scene, i) => (
+                <div
+                  key={i}
+                  style={{
+                    ...bg(scene.img),
+                    opacity: i === sceneIndex ? 1 : 0,
+                    transition: 'opacity 2s ease-in-out',
+                    zIndex: i === sceneIndex ? 2 : 1,
+                  }}
+                />
+              ))}
 
               <div style={center}>
                 {scenes[sceneIndex].lines
@@ -181,7 +192,6 @@ const button = {
   padding: '16px 32px',
   background: 'transparent',
   color: '#efe7d6',
-  cursor: 'pointer',
 };
 
 const titleScreen = {
