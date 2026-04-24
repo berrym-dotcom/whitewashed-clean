@@ -14,14 +14,14 @@ export default function Home() {
     } catch {}
   };
 
-  // 🎬 AUTO SCROLL (FIXED START TIMING)
+  // 🎬 FASTER AUTO SCROLL
   useEffect(() => {
     if (!started) return;
 
     let running = true;
     let scrollY = window.scrollY;
 
-    const speed = 0.5;
+    const speed = 0.8; // 🔥 faster pacing
 
     const startScroll = () => {
       const scroll = () => {
@@ -33,8 +33,7 @@ export default function Home() {
       scroll();
     };
 
-    // 🔥 delay ensures overlay is gone before scroll begins
-    const timeout = setTimeout(startScroll, 800);
+    const timeout = setTimeout(startScroll, 500);
 
     const stop = () => (running = false);
 
@@ -63,7 +62,7 @@ export default function Home() {
         </div>
       )}
 
-      <div style={{ opacity: started ? 1 : 0, transition: 'opacity 1.5s' }}>
+      <div style={{ opacity: started ? 1 : 0, transition: 'opacity 1s' }}>
         <Scene title="WHITEWASHED" />
 
         <Scene img="/eugenics.jpg" text="EUGENICS." />
@@ -112,7 +111,7 @@ function Scene({
   useEffect(() => {
     setStep(0);
 
-    const timings = [400, 900, 1400, 1900];
+    const timings = [200, 450, 700, 950]; // 🔥 faster reveal
 
     const timers = timings.map((t, i) =>
       setTimeout(() => setStep(i + 1), t)
@@ -165,7 +164,7 @@ function Reveal({
       style={{
         opacity: show ? 1 : 0,
         transform: show ? 'translateY(0px)' : 'translateY(20px)',
-        transition: 'all 0.8s ease',
+        transition: 'all 0.5s ease', // 🔥 snappier
       }}
     >
       {children}
@@ -200,7 +199,7 @@ const button: CSSProperties = {
 };
 
 const scene: CSSProperties = {
-  height: '110vh',
+  height: '100vh',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
@@ -220,7 +219,7 @@ const bg = (img: string): CSSProperties => ({
 const overlay: CSSProperties = {
   position: 'absolute',
   inset: 0,
-  background: 'rgba(0,0,0,0.65)',
+  background: 'rgba(0,0,0,0.6)',
 };
 
 const content: CSSProperties = {
