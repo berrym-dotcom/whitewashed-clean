@@ -14,13 +14,43 @@ export default function Home() {
     } catch {}
   };
 
+  // 🎬 CONTROLLED AUTO-SCROLL (stops on interaction → menu works)
+  useEffect(() => {
+    if (!started) return;
+
+    let scrollY = window.scrollY;
+    let running = true;
+
+    const speed = 0.45;
+
+    const scroll = () => {
+      if (!running) return;
+      scrollY += speed;
+      window.scrollTo(0, scrollY);
+      requestAnimationFrame(scroll);
+    };
+
+    scroll();
+
+    const stop = () => (running = false);
+
+    window.addEventListener('wheel', stop);
+    window.addEventListener('touchstart', stop);
+    window.addEventListener('mousedown', stop);
+
+    return () => {
+      running = false;
+      window.removeEventListener('wheel', stop);
+      window.removeEventListener('touchstart', stop);
+      window.removeEventListener('mousedown', stop);
+    };
+  }, [started]);
+
   return (
     <main style={main}>
-
-      {/* 🎵 AUDIO */}
       <audio ref={audioRef} src="/ambient.mp3" loop />
 
-      {/* 🎬 START SCREEN */}
+      {/* START SCREEN */}
       {!started && (
         <div style={cover}>
           <button onClick={startExperience} style={button}>
@@ -29,8 +59,8 @@ export default function Home() {
         </div>
       )}
 
-      {/* 🎞 FILM */}
-      <div style={{ ...film, opacity: started ? 1 : 0 }}>
+      {/* FILM */}
+      <div style={{ opacity: started ? 1 : 0, transition: 'opacity 1.5s' }}>
 
         <Scene title="WHITEWASHED" />
 
@@ -66,11 +96,18 @@ export default function Home() {
 /* ---------- SCENE ---------- */
 
 function Scene({ img, text, title, children }: any) {
-  const [visible, setVisible] = useState(false);
+  const [step, setStep] = useState(0);
 
   useEffect(() => {
-    const t = setTimeout(() => setVisible(true), 300);
-    return () => clearTimeout(t);
+    setStep(0);
+
+    const timings = [400, 900, 1400, 1900];
+
+    const timers = timings.map((t, i) =>
+      setTimeout(() => setStep(i + 1), t)
+    );
+
+    return () => timers.forEach(clearTimeout);
   }, []);
 
   return (
@@ -78,17 +115,46 @@ function Scene({ img, text, title, children }: any) {
       {img && <div style={bg(img)} />}
       <div style={overlay} />
 
-      <div style={{
-        ...content,
-        opacity: visible ? 1 : 0,
-        transform: visible ? 'translateY(0px)' : 'translateY(20px)',
-        transition: 'all 1.2s ease'
-      }}>
-        {title && <h1 style={titleStyle}>{title}</h1>}
-        {text && <p style={textStyle}>{text}</p>}
-        {children}
+      <div style={content}>
+        {title && (
+          <Reveal show={step >= 1}>
+            <h1 style={titleStyle}>{title}</h1>
+          </Reveal>
+        )}
+
+        {text && (
+          <Reveal show={step >= 1}>
+            <p style={textStyle}>{text}</p>
+          </Reveal>
+        )}
+
+        {children &&
+          Array.isArray(children) &&
+          children.map((child, i) => (
+            <Reveal key={i} show={step >= i + 1}>
+              {child}
+            </Reveal>
+          ))}
+
+        {!Array.isArray(children) && children}
       </div>
     </section>
+  );
+}
+
+/* ---------- REVEAL ---------- */
+
+function Reveal({ show, children }: any) {
+  return (
+    <div
+      style={{
+        opacity: show ? 1 : 0,
+        transform: show ? 'translateY(0px)' : 'translateY(20px)',
+        transition: 'all 0.8s ease',
+      }}
+    >
+      {children}
+    </div>
   );
 }
 
@@ -99,10 +165,6 @@ const main = {
   color: '#efe7d6',
 };
 
-const film = {
-  scrollSnapType: 'y mandatory',
-};
-
 const cover = {
   position: 'fixed',
   inset: 0,
@@ -111,7 +173,7 @@ const cover = {
   alignItems: 'center',
   justifyContent: 'center',
   zIndex: 9999,
-} as any;
+};
 
 const button = {
   border: '1px solid #efe7d6',
@@ -120,17 +182,16 @@ const button = {
   background: 'transparent',
   color: '#efe7d6',
   cursor: 'pointer',
-} as any;
+};
 
 const scene = {
-  height: '100vh',
+  height: '110vh',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
   textAlign: 'center',
   position: 'relative',
-  scrollSnapAlign: 'start',
-} as any;
+};
 
 const bg = (img: string) => ({
   position: 'absolute',
@@ -139,32 +200,32 @@ const bg = (img: string) => ({
   backgroundSize: 'cover',
   backgroundPosition: 'center',
   filter: 'grayscale(100%) brightness(0.5)',
-} as any);
+});
 
 const overlay = {
   position: 'absolute',
   inset: 0,
   background: 'rgba(0,0,0,0.65)',
-} as any;
+};
 
 const content = {
   position: 'relative',
   zIndex: 2,
   maxWidth: 700,
-} as any;
+};
 
 const titleStyle = {
   fontSize: '80px',
   letterSpacing: '8px',
-} as any;
+};
 
 const textStyle = {
   fontSize: '22px',
   letterSpacing: '2px',
-} as any;
+};
 
 const line = {
   margin: '10px 0',
   fontSize: '18px',
   letterSpacing: '2px',
-} as any;
+};
