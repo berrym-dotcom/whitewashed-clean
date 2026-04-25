@@ -12,11 +12,7 @@ export default function Home() {
   const [fade, setFade] = useState(false);
 
   const scenes = [
-    {
-      img: '/eugenics.jpg',
-      lines: ['EUGENICS.'],
-      timings: [4000],
-    },
+    { img: '/eugenics.jpg', lines: ['EUGENICS.'], timings: [4000] },
     {
       img: '/newspaper.jpg',
       lines: ['1905.', 'A murder.', 'The story changed.'],
@@ -24,9 +20,7 @@ export default function Home() {
     },
     {
       img: '/bertha.jpg',
-      lines: [
-        'Jane Stanford’s personal assistant, Bertha Berner, was there.',
-      ],
+      lines: ['Jane Stanford’s personal assistant, Bertha Berner, was there.'],
       timings: [5500],
     },
     {
@@ -39,34 +33,53 @@ export default function Home() {
       ],
       timings: [3000, 3000, 4000, 5000],
     },
-    {
-      img: '/stanford.jpg',
-      lines: ['The institution endured.'],
-      timings: [5000],
-    },
+    { img: '/stanford.jpg', lines: ['The institution endured.'], timings: [5000] },
   ];
+
+  // 🔥 preload images (prevents flicker)
+  useEffect(() => {
+    scenes.forEach((s) => {
+      const img = new Image();
+      img.src = s.img;
+    });
+  }, []);
 
   const startExperience = async () => {
     setStarted(true);
+
     try {
-      await audioRef.current?.play();
-    } catch {}
-    setTimeout(() => setPhase('film'), 6000);
+      const audio = audioRef.current;
+      if (audio) {
+        audio.volume = 0.6;
+        await audio.play();
+      }
+    } catch (e) {
+      console.log('Audio blocked until user interaction');
+    }
+
+    const isMobile = window.innerWidth < 768;
+    setTimeout(() => setPhase('film'), isMobile ? 2500 : 6000);
   };
 
+  // 🔥 safe scene runner
   useEffect(() => {
     if (!started || phase !== 'film') return;
 
     let scene = 0;
     let line = 0;
+    let cancelled = false;
 
     const run = () => {
+      if (cancelled) return;
+
       setSceneIndex(scene);
       setLineIndex(line);
 
       const duration = scenes[scene].timings[line];
 
       setTimeout(() => {
+        if (cancelled) return;
+
         if (line < scenes[scene].lines.length - 1) {
           line++;
         } else {
@@ -83,6 +96,10 @@ export default function Home() {
     };
 
     run();
+
+    return () => {
+      cancelled = true;
+    };
   }, [started, phase]);
 
   const triggerEnd = () => {
@@ -91,6 +108,7 @@ export default function Home() {
     const audio = audioRef.current;
     if (audio) {
       let volume = audio.volume;
+
       const fadeAudio = setInterval(() => {
         if (volume > 0.01) {
           volume -= 0.01;
@@ -130,7 +148,6 @@ export default function Home() {
           {/* FILM */}
           {phase === 'film' && (
             <>
-              {/* CROSSFADE IMAGES */}
               {scenes.map((scene, i) => (
                 <div
                   key={i}
@@ -142,7 +159,6 @@ export default function Home() {
                 />
               ))}
 
-              {/* TEXT — CONTROLLED + CLEAN */}
               <div style={center}>
                 {scenes[sceneIndex].lines.map((line, i) => (
                   <p
@@ -160,8 +176,14 @@ export default function Home() {
             </>
           )}
 
-          {/* FADE OUT */}
-          <div style={{ ...fadeOverlay, opacity: fade ? 1 : 0 }} />
+          {/* FADE OVERLAY */}
+          <div
+            style={{
+              ...fadeOverlay,
+              opacity: fade ? 1 : 0,
+              pointerEvents: 'none',
+            }}
+          />
 
           {/* END MENU */}
           {phase === 'end' && (
@@ -195,6 +217,9 @@ const button = {
   padding: '16px 32px',
   background: 'transparent',
   color: '#efe7d6',
+  fontSize: '16px',
+  letterSpacing: '2px',
+  cursor: 'pointer',
 };
 
 const titleScreen = {
@@ -207,8 +232,9 @@ const titleScreen = {
 };
 
 const titleText = {
-  fontSize: '100px',
-  letterSpacing: '12px',
+  fontSize: 'clamp(42px, 12vw, 100px)',
+  letterSpacing: '8px',
+  textAlign: 'center' as const,
 };
 
 const bg = (img: string) => ({
@@ -216,7 +242,7 @@ const bg = (img: string) => ({
   inset: 0,
   backgroundImage: `url(${img})`,
   backgroundSize: 'cover',
-  backgroundPosition: 'center',
+  backgroundPosition: 'center top',
   filter: 'grayscale(100%) brightness(0.4)',
 });
 
@@ -227,11 +253,15 @@ const center = {
   flexDirection: 'column' as const,
   alignItems: 'center',
   justifyContent: 'center',
+  padding: 'env(safe-area-inset-top) 20px env(safe-area-inset-bottom)',
 };
 
 const text = {
-  fontSize: '26px',
+  fontSize: 'clamp(16px, 4.5vw, 26px)',
   margin: '8px 0',
+  padding: '0 20px',
+  textAlign: 'center' as const,
+  maxWidth: '90vw',
 };
 
 const fadeOverlay = {
