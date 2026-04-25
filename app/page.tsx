@@ -59,6 +59,7 @@ export default function Home() {
     setTimeout(() => setPhase('film'), isMobile ? 2500 : 6000);
   };
 
+  // scene runner
   useEffect(() => {
     if (!started || phase !== 'film') return;
 
@@ -99,26 +100,38 @@ export default function Home() {
     };
   }, [started, phase]);
 
+  // ✅ FIXED AUDIO FADE
   const triggerEnd = () => {
     setFade(true);
 
     const audio = audioRef.current;
-    if (audio) {
-      let volume = audio.volume;
+    const FADE_DURATION = 3000;
 
-      const fadeAudio = setInterval(() => {
-        if (volume > 0.01) {
-          volume -= 0.01;
-          audio.volume = volume;
+    if (audio) {
+      const startVolume = audio.volume;
+      const startTime = performance.now();
+
+      const fade = (time: number) => {
+        const elapsed = time - startTime;
+        const progress = Math.min(elapsed / FADE_DURATION, 1);
+
+        audio.volume = startVolume * (1 - progress);
+
+        if (progress < 1) {
+          requestAnimationFrame(fade);
         } else {
           audio.volume = 0;
           audio.pause();
-          clearInterval(fadeAudio);
-        }
-      }, 120);
-    }
 
-    setTimeout(() => setPhase('end'), 4500);
+          // 👇 menu appears AFTER fade completes
+          setPhase('end');
+        }
+      };
+
+      requestAnimationFrame(fade);
+    } else {
+      setTimeout(() => setPhase('end'), FADE_DURATION);
+    }
   };
 
   return (
@@ -228,8 +241,9 @@ const titleScreen = {
   inset: 0,
   background: '#000',
   display: 'flex',
-  alignItems: 'center',
+  alignItems: 'flex-start',
   justifyContent: 'center',
+  paddingTop: '20vh',
 };
 
 const titleText = {
@@ -254,8 +268,8 @@ const center = {
   display: 'flex',
   flexDirection: 'column' as const,
   alignItems: 'center',
-  justifyContent: 'center',
-  padding: 'env(safe-area-inset-top) 20px env(safe-area-inset-bottom)',
+  justifyContent: 'flex-end',
+  paddingBottom: '20vh',
 };
 
 const text = {
