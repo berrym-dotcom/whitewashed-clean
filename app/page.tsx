@@ -36,7 +36,6 @@ export default function Home() {
     { img: '/stanford.jpg', lines: ['The institution endured.'], timings: [5000] },
   ];
 
-  // preload images
   useEffect(() => {
     scenes.forEach((s) => {
       const img = new Image();
@@ -59,7 +58,6 @@ export default function Home() {
     setTimeout(() => setPhase('film'), isMobile ? 2500 : 6000);
   };
 
-  // scene runner
   useEffect(() => {
     if (!started || phase !== 'film') return;
 
@@ -100,37 +98,39 @@ export default function Home() {
     };
   }, [started, phase]);
 
-  // ✅ FIXED AUDIO FADE
+  // ✅ NEW TIMING: menu first, fade after
   const triggerEnd = () => {
     setFade(true);
 
+    // 👇 show menu immediately
+    setPhase('end');
+
     const audio = audioRef.current;
+
+    const HOLD_BEFORE_FADE = 1500; // pause before fade
     const FADE_DURATION = 3000;
 
     if (audio) {
-      const startVolume = audio.volume;
-      const startTime = performance.now();
+      setTimeout(() => {
+        const startVolume = audio.volume;
+        const startTime = performance.now();
 
-      const fade = (time: number) => {
-        const elapsed = time - startTime;
-        const progress = Math.min(elapsed / FADE_DURATION, 1);
+        const fade = (time: number) => {
+          const elapsed = time - startTime;
+          const progress = Math.min(elapsed / FADE_DURATION, 1);
 
-        audio.volume = startVolume * (1 - progress);
+          audio.volume = startVolume * (1 - progress);
 
-        if (progress < 1) {
-          requestAnimationFrame(fade);
-        } else {
-          audio.volume = 0;
-          audio.pause();
+          if (progress < 1) {
+            requestAnimationFrame(fade);
+          } else {
+            audio.volume = 0;
+            audio.pause();
+          }
+        };
 
-          // 👇 menu appears AFTER fade completes
-          setPhase('end');
-        }
-      };
-
-      requestAnimationFrame(fade);
-    } else {
-      setTimeout(() => setPhase('end'), FADE_DURATION);
+        requestAnimationFrame(fade);
+      }, HOLD_BEFORE_FADE);
     }
   };
 
@@ -148,7 +148,6 @@ export default function Home() {
 
       {started && (
         <>
-          {/* TITLE */}
           {phase === 'title' && (
             <div style={titleScreen}>
               <h1 style={titleText}>
@@ -159,7 +158,6 @@ export default function Home() {
             </div>
           )}
 
-          {/* FILM */}
           {phase === 'film' && (
             <>
               {scenes.map((scene, i) => (
@@ -190,7 +188,6 @@ export default function Home() {
             </>
           )}
 
-          {/* FADE */}
           <div
             style={{
               ...fadeOverlay,
@@ -199,7 +196,6 @@ export default function Home() {
             }}
           />
 
-          {/* END MENU */}
           {phase === 'end' && (
             <div style={menu}>
               <a href="/" style={menuItem}>HOME</a>
@@ -215,7 +211,7 @@ export default function Home() {
   );
 }
 
-/* STYLES */
+/* STYLES (unchanged) */
 
 const cover = {
   position: 'fixed' as const,
