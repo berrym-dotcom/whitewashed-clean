@@ -36,7 +36,7 @@ export default function Home() {
     { img: '/stanford.jpg', lines: ['The institution endured.'], timings: [5000] },
   ];
 
-  // 🔥 preload images (prevents flicker)
+  // preload images
   useEffect(() => {
     scenes.forEach((s) => {
       const img = new Image();
@@ -53,15 +53,12 @@ export default function Home() {
         audio.volume = 0.6;
         await audio.play();
       }
-    } catch (e) {
-      console.log('Audio blocked until user interaction');
-    }
+    } catch {}
 
     const isMobile = window.innerWidth < 768;
     setTimeout(() => setPhase('film'), isMobile ? 2500 : 6000);
   };
 
-  // 🔥 safe scene runner
   useEffect(() => {
     if (!started || phase !== 'film') return;
 
@@ -141,7 +138,11 @@ export default function Home() {
           {/* TITLE */}
           {phase === 'title' && (
             <div style={titleScreen}>
-              <h1 style={titleText}>WHITEWASHED</h1>
+              <h1 style={titleText}>
+                WHITE
+                <br />
+                WASHED
+              </h1>
             </div>
           )}
 
@@ -176,7 +177,7 @@ export default function Home() {
             </>
           )}
 
-          {/* FADE OVERLAY */}
+          {/* FADE */}
           <div
             style={{
               ...fadeOverlay,
@@ -232,9 +233,10 @@ const titleScreen = {
 };
 
 const titleText = {
-  fontSize: 'clamp(42px, 12vw, 100px)',
-  letterSpacing: '8px',
+  fontSize: 'clamp(36px, 10vw, 100px)',
+  letterSpacing: 'clamp(4px, 2vw, 10px)',
   textAlign: 'center' as const,
+  lineHeight: '1.1',
 };
 
 const bg = (img: string) => ({
