@@ -36,7 +36,6 @@ export default function Home() {
     { img: '/stanford.jpg', lines: ['The institution endured.'], timings: [5000] },
   ];
 
-  // preload images
   useEffect(() => {
     scenes.forEach((s) => {
       const img = new Image();
@@ -59,7 +58,6 @@ export default function Home() {
     setTimeout(() => setPhase('film'), isMobile ? 2500 : 6000);
   };
 
-  // scene runner
   useEffect(() => {
     if (!started || phase !== 'film') return;
 
@@ -100,7 +98,7 @@ export default function Home() {
     };
   }, [started, phase]);
 
-  // 🎯 FINAL TIMING FIX
+  // 🎬 BEST VERSION: cinematic linger + long curved fade
   const triggerEnd = () => {
     setFade(true);
 
@@ -109,8 +107,8 @@ export default function Home() {
 
     const audio = audioRef.current;
 
-    const HOLD_TIME = 7000;      // 👈 linger longer
-    const FADE_DURATION = 5000;  // 👈 slow fade
+    const HOLD_TIME = 7000;       // time to explore menu
+    const FADE_DURATION = 12000;  // very long fade
 
     if (audio) {
       setTimeout(() => {
@@ -121,7 +119,10 @@ export default function Home() {
           const elapsed = time - startTime;
           const progress = Math.min(elapsed / FADE_DURATION, 1);
 
-          audio.volume = startVolume * (1 - progress);
+          // 🎧 curved fade (feels natural, not linear)
+          const eased = Math.pow(1 - progress, 2);
+
+          audio.volume = startVolume * eased;
 
           if (progress < 1) {
             requestAnimationFrame(fade);
